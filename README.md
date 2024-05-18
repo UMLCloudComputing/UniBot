@@ -1,1 +1,1 @@
-# discordbot
+Rowdy the Riverbot
