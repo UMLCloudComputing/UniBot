@@ -1,9 +1,11 @@
 import requests
 import yaml
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
-
-TOKEN = "INSERT_DISCORD_TOKEN_HERE"
-APPLICATION_ID = "INSERT_APPLICATION_ID_HERE"
+TOKEN = os.getenv('TOKEN')
+APPLICATION_ID = os.getenv('ID')
 URL = f"https://discord.com/api/v9/applications/{APPLICATION_ID}/commands"
 
 
