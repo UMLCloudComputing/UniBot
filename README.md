@@ -11,6 +11,11 @@ DO NOT UPLOAD THE .env FILE TO GITHUB!!
 Run the program by typing
 `python3 bot.py`
 
+# Dependencies
+`pip install discord.py`
+`pip install flask`
+`pip install discord-interactions`
+
 # Technologies:
 1. Amazon Bedrock
 2. AWS Lambda
