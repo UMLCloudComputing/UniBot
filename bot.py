@@ -1,11 +1,15 @@
 import discord
 import os
 import platform
+import requests
+
+from dotenv import load_dotenv
 from discord.ext import commands
-from discord import app_commands
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix = '!', intents=intents)
+
+load_dotenv()
 
 @client.event
 async def on_ready():
@@ -15,6 +19,13 @@ async def on_ready():
 @client.command()
 async def ping(ctx):
     await ctx.send(f"Pong! {round(client.latency * 1000)}ms")
+
+@client.command()
+async def weather(ctx):
+    response = requests.get('https://api.weather.gov/gridpoints/BOX/74,59/forecast')
+    data = response.json()
+    forecast = data['properties']['periods'][0]
+    await ctx.send(f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}")
 
 @client.command()
 async def info(ctx):
@@ -27,4 +38,4 @@ async def info(ctx):
 
 
 
-client.run(os.getenv('BOT_TOKEN'))
+client.run(os.getenv('TOKEN'))

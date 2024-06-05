@@ -1,14 +1,20 @@
-# dbot
+# Rowdy the Riverbot
 Discord Bot, to answers all your questions about UML.
 
 # Setting up.
+Create an .env file
+
+Create an environmental variable called TOKEN and set it to the bot token.
+DO NOT UPLOAD THE .env FILE TO GITHUB!!
+`TOKEN=<enter your bot token here>`
+
+Run the program by typing
 `python3 bot.py`
-You need to paste your bot token in the environmental variable BOT_TOKEN.
 
+# Technologies:
+1. Amazon Bedrock
+2. AWS Lambda
+3. Discord.py
 
-# Potential Technologies:
-
-Amazon Bedrock
-AWS Lambda
-LangChain
-DynamoDB (for RAG)
+# Invite link
+https://discord.com/oauth2/authorize?client_id=1241285489969856514&permissions=8&scope=bot%20applications.commands
