@@ -5,6 +5,7 @@
 [![Stargazers](https://img.shields.io/github/stars/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/stargazers)
 [![Issues](https://img.shields.io/github/issues/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/issues)
 [![MIT License](https://img.shields.io/github/license/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/blob/master/LICENSE)
+</div>
 
 # 📘 About
 A Discord Bot to answers all your questions about UML! Has LLM integration to respond to a wide variety of questions.
