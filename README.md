@@ -7,14 +7,10 @@
 [![MIT License](https://img.shields.io/github/license/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/blob/master/LICENSE)
 </div>
 
-# 📘 About
+
+
+## 📘 About
 A Discord Bot to answers all your questions about UML! Has LLM integration to respond to a wide variety of questions.
-
-## 🎉 Acknowledgments
-
-Many thanks to the [UMass Lowell Cloud Computing Club](https://umasslowellclubs.campuslabs.com/engage/organization/cloudcomputingclub) members, our faculty advisor [Dr. Johannes Weis](https://www.uml.edu/sciences/computer-science/people/weis-johannes.aspx), and the [UMass Lowell Computer Science Department](https://www.uml.edu/Sciences/computer-science/) for their support and guidance.
-[![Contributors](https://contributors-img.web.app/image?repo=UMLCloudComputing/UniPath.io)](https://github.com/UMLCloudComputing/UniPath.io/graphs/contributors)
-
 
 ## 👨‍💻 Contributing
 
@@ -84,7 +80,24 @@ Upon executing a slash command, discord will call the url specified in "Interact
 
 `src/app/main.py` will interpret the command and return a result back to the user.
 
+## 🤯 Dependencies
+
+<details>
+<summary>Dependencies</summary>
+   
+1. AWS CLI
+2. AWS CDK `npm install -g aws-cdk`
+3. Flask `pip install flask`
+4. Discord Interactions `pip install discord-interactions`
+5. pyyaml `pip install pyyaml`
+6. requests `pip install requests`
+</details>
+
 ## 🚀 Setting up.
+
+<details>
+<summary>Setup</summary>
+   
 1. Install everything listed in the dependencies section.
 2. Clone the repository
 3. Create an IAM user with the permissions to access lambda functions and cloud formation.
@@ -94,8 +107,14 @@ Upon executing a slash command, discord will call the url specified in "Interact
 7. Alternatively go to the file `lib/discord-bot-lambda-stack.ts` and hardcode public key of your discord bot.
 
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
+</details>
 
-## ⚙ Command Registration
+
+## 👉 Commands
+
+<details>
+<summary>Register Commands</summary>
+
 1. Create an `.env` file in the root directory of the project. Do not upload this file to github, it contains secrets.
 2. Set these two variables in the file
    1. `TOKEN=<your discord bot token>`
@@ -118,36 +137,52 @@ Upon executing a slash command, discord will call the url specified in "Interact
 ```
 4. From your root directory, run `python3 register_commands.py`
 5. You should receive the status `201` or `200` printing out in your terminal.
+</details>
 
+<details>
+<summary>Define Commands</summary>
 
-## 👉 Command definition
 1. Commands can be defined in the file `src/app/main.py`
 2. You can register commands in the `interact` function by adding more `elif` statements. 
    1. The parameters of the command that are received from the user is in encoded in the variable `data`. The statement `data["options"][n]["value"]` will extract the argument `n`.   
    2. The message that the bot returns to the user is specified in the string variable `message_content`. It is crucial that `message_content` is a string.
+</details>
 
 ## 📦 Deploying
+
+<details>
+<summary>Deployments</summary>
+
 1. Deploy to lambda by running `cdk deploy`.
 2. If `cdk deploy` fails due to insufficient privileges to run docker, type `sudo cdk deploy`. If that doesn't work, type `sudo -i` to become root, `cd` back to the project root and run `cdk deploy` again.
 3. If you are deploying this using CI/CD methods, you will most likely need to rerun what you ran in the setup phase, **especially** `cdk bootstrap`.
 4. If successful, `cdk deploy` should have this: `DiscordBotLambdaStack.FunctionUrl = <your lambda function url>` in the output.
 5. Copy the lambda function URL and go to the discord developer's portal. Set this as Interactions Endpoint for your Bot.
 
-## 🤯 Dependencies
-AWS CLI
-AWS CDK `npm install -g aws-cdk`
-Flask `pip install flask`
-Discord Interactions `pip install discord-interactions`
-pyyaml `pip install pyyaml`
-requests `pip install requests`
+</details>
 
 ## 🔥 Technologies:
+
+<details>
+<summary>Technologies Used</summary>
+
 1. AWS Lambda
 2. AWS CDK
 3. AWS Cloudformation
 4. AWS Bedrock
 5. Discord Interactions
 
+
+</details>
+
 ## 🎉 Invite link
 [Invite Link](https://discord.com/oauth2/authorize?client_id=1241285489969856514&permissions=8&scope=bot%20applications.commands)
+
+## 🎉 Acknowledgments
+
+Many thanks to the [UMass Lowell Cloud Computing Club](https://umasslowellclubs.campuslabs.com/engage/organization/cloudcomputingclub) members, our faculty advisor [Dr. Johannes Weis](https://www.uml.edu/sciences/computer-science/people/weis-johannes.aspx), and the [UMass Lowell Computer Science Department](https://www.uml.edu/Sciences/computer-science/) for their support and guidance.
+
+
+
+[![Contributors](https://contributors-img.web.app/image?repo=UMLCloudComputing/rowdybot)](https://github.com/UMLCloudComputing/rowdybot/graphs/contributors)
 
