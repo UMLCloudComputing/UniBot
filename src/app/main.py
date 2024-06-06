@@ -31,6 +31,9 @@ def interact(raw_request):
         elif command_name == "echo":
             original_message = data["options"][0]["value"]
             message_content = f"Echoing: {original_message}"
+        elif command_name == "chat":
+            original_message = data["options"][0]["value"]
+            message_content = f"Echoing: {original_message}"
 
         response_data = {
             "type": 4,
