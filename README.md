@@ -74,41 +74,47 @@ Thank you for your contribution!
 </details>
 
 ## ⭐ How it works
-As of now, the command model with the bot is asynchronous. 
-
-Upon executing a slash command, discord will call the url specified in "Interaction Endpoints URL" (which can be specified in the discord app development portal). This url will be the Lambda Function URL, that will be printed in the command line when you run `cdk deploy`.The result of discord calling this URL will execute the lambda function. When the bot is not in use, the lambda function will not run, significantly saving costs compared to an EC2 instance.
-
-`src/app/main.py` will interpret the command and return a result back to the user.
-
-## 🤯 Dependencies
 
 <details>
-<summary>Dependencies</summary>
-   
-1. AWS CLI
-2. AWS CDK `npm install -g aws-cdk`
-3. Flask `pip install flask`
-4. Discord Interactions `pip install discord-interactions`
-5. pyyaml `pip install pyyaml`
-6. requests `pip install requests`
+
+<summary>Expand</summary>
+
+The interaction model with the bot is asynchronous.
+
+Upon executing a slash command, Discord will call the URL specified in "Interaction Endpoints URL" (which can be specified in the discord app development portal).
+The result of discord calling this URL will execute our Lambda Function (which is created through running `cdk deploy` on this repository). The lambda function handles the interaction request and sends a response back to the user.
+
+When the bot is not in use, the Lambda Function will not run, significantly saving costs compared to an EC2 instance.
 </details>
 
 ## 🚀 Setting up.
+<details>
+<summary>Dependencies</summary>
+
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [Node.JS](https://github.com/nvm-sh/nvm)
+- Python `sudo apt install python3`
+- AWS CDK `npm install -g aws-cdk`
+- Flask `pip install flask`
+- Discord Interactions `pip install discord-interactions`
+- Pyyaml `pip install pyyaml`
+- Requests `pip install requests`
+
+</details>
 
 <details>
 <summary>Setup</summary>
    
-1. Install everything listed in the dependencies section.
+1. Install the tools listed in the Dependencies section of the README.md
 2. Clone the repository
 3. Create an IAM user with the permissions to access lambda functions and cloud formation.
 4. Run `aws configure` to setup your AWS credentials.
 5. Run `cdk bootstrap` to setup the cdk project.
-6. In a CI/CD environment, you should set the environmental variable `DISCORD_PUBLIC_KEY` to the public key of your discord bot, which can be found in the developer portal.
-7. Alternatively go to the file `lib/discord-bot-lambda-stack.ts` and hardcode public key of your discord bot.
+6. Set environmental variable `DISCORD_PUBLIC_KEY` to the public key of your discord bot, which can be found in the developer portal.
+7. Alternatively go to the file `lib/discord-bot-lambda-stack.ts` and hardcode the public key of your discord bot.
 
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
 </details>
-
 
 ## 👉 Commands
 
@@ -153,27 +159,24 @@ Upon executing a slash command, discord will call the url specified in "Interact
 <details>
 <summary>Deployments</summary>
 
-1. Deploy to lambda by running `cdk deploy`.
-2. If `cdk deploy` fails due to insufficient privileges to run docker, type `sudo cdk deploy`. If that doesn't work, type `sudo -i` to become root, `cd` back to the project root and run `cdk deploy` again.
-3. If you are deploying this using CI/CD methods, you will most likely need to rerun what you ran in the setup phase, **especially** `cdk bootstrap`.
+1. Run `cdk bootstrap` to setup the project for deployment.
+2. Deploy to lambda by running `cdk deploy`.
+3. If `cdk deploy` fails due to insufficient privileges to run docker, type `sudo cdk deploy`. If that doesn't work, type `sudo -i` to become root, `cd` back to the project root and run `cdk deploy` again.
 4. If successful, `cdk deploy` should have this: `DiscordBotLambdaStack.FunctionUrl = <your lambda function url>` in the output.
-5. Copy the lambda function URL and go to the discord developer's portal. Set this as Interactions Endpoint for your Bot.
-
-</details>
-
-## 🔥 Technologies:
-
-<details>
-<summary>Technologies Used</summary>
-
-1. AWS Lambda
-2. AWS CDK
-3. AWS Cloudformation
-4. AWS Bedrock
-5. Discord Interactions
+5. Copy the Lambda Function URL and go to your Discord Developer's Portal (discord.dev). Set this as Interactions Endpoint for your Bot.
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/6e0171af-3151-4223-9590-b7d9953aca39)
 
 
 </details>
+
+## 🏗 Technologies:
+
+- ![AWS Lambda](https://img.shields.io/badge/AWS_Lambda-FF9900?style=for-the-badge&logo=awslambda&logoColor=white)
+- ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+- ![Infastructure as Code](https://img.shields.io/badge/Infastructure_as_Code-FFA500?style=for-the-badge&logo=terraform&logoColor=white)
+- ![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-CA2C92?style=for-the-badge&logo=amazonbedrock&logoColor=white)
+
+
 
 ## 🎉 Invite link
 [Invite Link](https://discord.com/oauth2/authorize?client_id=1241285489969856514&permissions=8&scope=bot%20applications.commands)
