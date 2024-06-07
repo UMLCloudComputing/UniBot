@@ -1,9 +1,9 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
-import * as dotenv from 'dotenv';
+import 'dotenv/config';
 
-dotenv.config({path: '../.env'})
+require('dotenv').config()
 
 export class DiscordBotLambdaStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -18,9 +18,7 @@ export class DiscordBotLambdaStack extends cdk.Stack {
         timeout: cdk.Duration.seconds(10),
         architecture: lambda.Architecture.X86_64,
         environment: {
-          // Public Keys can be securely hardcoded https://en.wikipedia.org/wiki/Public-key_cryptography
-          // Later we can put this in .env. DO NOT file an issue claiming there's a security vulnerability here
-          DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY || "3d1e299d29cf7d235d022cc5321d60389974560688a2b99f4601324ad5be1479",
+          DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("DISCORD_PUBLIC_KEY is not set"); })()
         },
       }
     );
