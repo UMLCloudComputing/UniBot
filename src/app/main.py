@@ -7,6 +7,7 @@ from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi
 from discord_interactions import verify_key_decorator
+from botocore.exceptions import ClientError
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 
@@ -92,8 +93,15 @@ def invokeModel(prompt: str,
 
     request = json.dumps(native_request)
 
-    streaming_response = client.invoke_model_with_response_stream(
-        modelId=MODEL_ID, body=request
-    )
+    try:
+        response = client.invoke_model(modelId = MODEL_ID, body = request)
 
+    except(ClientError, Exception) as e:
+        logger.info(f"ERROR: Can't invoke {MODEL_ID}. Reason: {e}")
+        exit(1)
+
+    model_reponse = json.loads(response["body"].read())
+
+    response_text = model_reponse["results"][0]["outputText"]
     
+    return response_text
