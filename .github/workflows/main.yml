@@ -20,8 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm i -g npm@global
-        npm ci
+        npm install
         npm install -g aws-cdk
 
     - name: Bootstrap
