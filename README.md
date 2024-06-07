@@ -110,14 +110,29 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 3. Create an IAM user that can access AWS Lambda and Cloudformation. Create an access key that you'll use in the next step.
 4. Run `aws configure` to setup your AWS credentials.
 5. Go to discord.dev and create a new application.
-6. Get your Public Key, Secret Token, and Bot ID. 
+
+Navigate to application creation
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/faa98e19-935e-4d27-a37d-afccdbb9cc77)
+
+Put the name of your application here and accept the terms of service.
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/cf796994-3e4d-4e8f-b208-0e191fa0a6d3)
+
+6. Get your Bot ID, Secret Key, and Public Key. Examples of where you find them are below.
+
+Bot ID:
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/fc627f8a-ef30-4a3a-a8e3-1fc1dff7884c)
+
+Secret Key:
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/bead23af-2180-4ad3-a254-afb1d1d2121a)
+
+Public Key:
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
 
 7. Save them in a `.env` file like the one below:
 
 Example of `.env` file.
 ```
-DISCORD_PUBLIC_KEY = <public key of discord bot>`
+DISCORD_PUBLIC_KEY = <public key of discord bot>
 TOKEN=<secret token of bot>
 ID=<ID of bot>
 ```
