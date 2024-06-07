@@ -1,4 +1,5 @@
 import os
+import requests
 from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi
@@ -34,6 +35,8 @@ def interact(raw_request):
         elif command_name == "chat":
             original_message = data["options"][0]["value"]
             message_content = f"Echoing: {original_message}"
+        elif command_name == "weather":
+            message_content = weather()
 
         response_data = {
             "type": 4,
@@ -45,3 +48,11 @@ def interact(raw_request):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# You can define dedicated functions for commands as well
+
+def weather():
+    response = requests.get('https://api.weather.gov/gridpoints/BOX/74,59/forecast')
+    data = response.json()
+    forecast = data['properties']['periods'][0]
+    return f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}"
