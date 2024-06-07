@@ -106,14 +106,38 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 <summary>Setup</summary>
    
 1. Install the tools listed in the Dependencies section of the README.md
-2. Clone the repository
-3. Create an IAM user with the permissions to access lambda functions and cloud formation.
+2. Clone the repository.
+3. Create an IAM user that can access AWS Lambda and Cloudformation. Create an access key that you'll use in the next step.
 4. Run `aws configure` to setup your AWS credentials.
-5. Run `cdk bootstrap` to setup the cdk project.
-6. Set environmental variable `DISCORD_PUBLIC_KEY` to the public key of your discord bot, which can be found in the developer portal.
-7. Alternatively go to the file `lib/discord-bot-lambda-stack.ts` and hardcode the public key of your discord bot.
+5. Go to discord.dev and create a new application.
 
+Navigate to application creation
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/faa98e19-935e-4d27-a37d-afccdbb9cc77)
+
+Put the name of your application here and accept the terms of service.
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/cf796994-3e4d-4e8f-b208-0e191fa0a6d3)
+
+6. Get your Bot ID, Secret Key, and Public Key. Examples of where you find them are below.
+
+Bot ID:
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/fc627f8a-ef30-4a3a-a8e3-1fc1dff7884c)
+
+Secret Key:
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/bead23af-2180-4ad3-a254-afb1d1d2121a)
+
+Public Key:
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
+
+7. Save them in a `.env` file like the one below:
+
+Example of `.env` file.
+```
+DISCORD_PUBLIC_KEY = <public key of discord bot>
+TOKEN=<secret token of bot>
+ID=<ID of bot>
+```
+8. Finally, run `cdk bootstrap` to setup the cdk project.
+
 </details>
 
 ## 👉 Commands
@@ -122,12 +146,10 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 <summary>Register Commands</summary>
 
 1. Create an `.env` file in the root directory of the project. Do not upload this file to github, it contains secrets.
-2. Set these two variables in the file
+2. Make sure these environmental variables are in your `.env` file.
    1. `TOKEN=<your discord bot token>`
    2. `ID=<your discord bot ID>`
 3. Enter new commands in this format, with each one on a new line in the file `commands/discord_commands.yaml`
-4. If you want CI/CD to do this for you, please set these environmental variables in your CI/CD environment.
-
 ```
 - name: <name of your command>
   description: <command description>
@@ -152,6 +174,8 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 2. You can register commands in the `interact` function by adding more `elif` statements. 
    1. The parameters of the command that are received from the user is in encoded in the variable `data`. The statement `data["options"][n]["value"]` will extract the argument `n`.   
    2. The message that the bot returns to the user is specified in the string variable `message_content`. It is crucial that `message_content` is a string.
+   3. Following the example of the `/weather` command, you may choose to call an external function that returns a string for better code readability.
+  
 </details>
 
 ## 📦 Deploying
