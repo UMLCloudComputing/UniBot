@@ -3,3 +3,6 @@ mangum
 asgiref
 discord-interactions
 requests
+bs4
+fire
+playwright

@@ -1,9 +1,12 @@
 import os
 import requests
+import test
+import course
 from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi
 from discord_interactions import verify_key_decorator
+
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 
@@ -37,6 +40,10 @@ def interact(raw_request):
             message_content = f"Echoing: {original_message}"
         elif command_name == "weather":
             message_content = weather()
+        elif command_name == "course":
+            message_content = getCourse("COMP.1020")
+        elif command_name == "pizza":
+            message_content = "PIZZA!"
 
         response_data = {
             "type": 4,
@@ -56,3 +63,6 @@ def weather():
     data = response.json()
     forecast = data['properties']['periods'][0]
     return f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}"
+
+def getCourse(courseID):
+    return course.get_course_name(course.get_html_response(course.get_course_url(courseID)))
