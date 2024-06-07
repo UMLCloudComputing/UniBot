@@ -97,11 +97,13 @@ def invokeModel(prompt: str,
         response = client.invoke_model(modelId = MODEL_ID, body = request)
 
     except(ClientError, Exception) as e:
-        logger.info(f"ERROR: Can't invoke {MODEL_ID}. Reason: {e}")
+        logger.error(f"ERROR: Can't invoke {MODEL_ID}. Reason: {e}")
         exit(1)
 
     model_reponse = json.loads(response["body"].read())
 
     response_text = model_reponse["results"][0]["outputText"]
+
+    logger.info(f"Sucessfully completed prompt request on AWS TT Lite model {MODEL_ID}")
     
     return response_text
