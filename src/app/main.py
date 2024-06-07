@@ -1,5 +1,8 @@
 import os
 import requests
+import boto3
+import json
+import logging
 from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi
@@ -7,10 +10,19 @@ from discord_interactions import verify_key_decorator
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 
+# Default Parameters for the model
+MODEL_ID = "amazon.titan-text-lite-v1"
+MAX_TOKEN_COUNT = 512
+TEMPERATURE = 0.7
+TOP_P = 0.9
+STOP_SEQUENCES = []
+
 app = Flask(__name__)
 asgi_app = WsgiToAsgi(app)
 handler = Mangum(asgi_app)
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 @app.route("/", methods=["POST"])
 async def interactions():
@@ -56,3 +68,32 @@ def weather():
     data = response.json()
     forecast = data['properties']['periods'][0]
     return f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}"
+
+
+# TODO, handle error responses or add additional verbose mode output
+def invokeModel(prompt: str, 
+                maxTokenCount = MAX_TOKEN_COUNT, 
+                temperature = TEMPERATURE, 
+                top_P = TOP_P):
+    
+    logger.info("Generating text with AWS TT Lite model %s", MODEL_ID)
+    
+    client = boto3.client("bedrock-runtime", region='us-east-1')
+    
+    native_request = {
+        "inputText": prompt,
+        "textGenerationConfig": {
+            "maxTokenCount": maxTokenCount,
+            "temperature": temperature,
+            "stopSequences": STOP_SEQUENCES,
+            "topP": top_P
+        }
+    }
+
+    request = json.dumps(native_request)
+
+    streaming_response = client.invoke_model_with_response_stream(
+        modelId=MODEL_ID, body=request
+    )
+
+    
