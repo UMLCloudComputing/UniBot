@@ -1,7 +1,7 @@
 import os
 import requests
-import test
-import course
+# import course
+from umlnow import course, Search, API
 from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi

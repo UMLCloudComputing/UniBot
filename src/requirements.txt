@@ -6,3 +6,4 @@ requests
 bs4
 fire
 playwright
+git+https://github.com/MartinMarwad/UML-NOW-CLI
