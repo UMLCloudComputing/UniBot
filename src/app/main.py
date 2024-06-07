@@ -41,7 +41,8 @@ def interact(raw_request):
         elif command_name == "weather":
             message_content = weather()
         elif command_name == "course":
-            message_content = getCourse("COMP.1020")
+            course_id = data["options"][0]["value"]
+            message_content = getCourse(course_id)
         elif command_name == "pizza":
             message_content = "PIZZA!"
 
