@@ -80,4 +80,5 @@ def getPre(courseID):
     return course.get_course_requirements_text(course.get_html_response(course.get_course_url(courseID)))
 
 def getCr(courseID):
-    return course.get_course_credits(course.get_html_response(course.get_course_url(courseID)))
+    dict = course.get_course_credits(course.get_html_response(course.get_course_url(courseID)))
+    return f"Credits: {dict['min']}"
