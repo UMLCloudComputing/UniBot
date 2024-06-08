@@ -5,7 +5,7 @@ on:
     branches:
       - main  # Specifies that this workflow should only run on the main branch
     paths:
-      - 'discord_commands.yaml'
+      - '/commands/discord_commands.yaml'
 
 jobs:
   update-commands:
@@ -27,5 +27,5 @@ jobs:
       - name: Run register_commands.py
         run: python ${{ github.workspace }}/commands/register_commands.py
         env:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            ID: ${{ secrets.ID }}
+            TOKEN: ${{ secrets.TOKEN }}
