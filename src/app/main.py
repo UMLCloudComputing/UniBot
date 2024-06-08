@@ -64,7 +64,7 @@ def interact(raw_request):
         elif command_name == "course":
             course_id = data["options"][0]["value"]
             course_op = data["options"][1]["value"]
-            return course.course_info(course_op, course_id)
+            message_content = course.course_info(course_op, course_id)
 
         # Command /pizza
         # Fun little command that prints pizza.

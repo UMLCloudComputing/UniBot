@@ -31,3 +31,14 @@
 - name: pizza
   description: Prints out pizza 🍕
   
+- name: course
+  description: Get information about an UML course
+  options:
+    - name: course
+      description: Name of the course
+      type: 3
+      required: true
+    - name: info
+      description: Type of information (name, credits, prereq)
+      type: 3
+      required: true
