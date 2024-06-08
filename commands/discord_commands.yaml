@@ -1,9 +1,6 @@
 - name: hello
   description: Say hello!
 
-- name: ping
-  description: Check if the bot is alive.
-
 - name: chat
   description: Chat with the bot or ask questions!
   options:
