@@ -29,5 +29,5 @@
       required: true
 
 - name: pizza
-  description: Prints out pizza
+  description: Prints out pizza 🍕
   
