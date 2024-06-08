@@ -1,6 +1,6 @@
 import os
 import requests
-# import course
+import llm
 import course
 from flask import Flask, jsonify, request
 from mangum import Mangum
@@ -53,7 +53,7 @@ def interact(raw_request):
         elif command_name == "chat":
             # The first argument
             original_message = data["options"][0]["value"]
-            message_content = f"It's great that you're saying that: {original_message}"
+            message_content = llm.invoke_llm(original_message)
 
         # Command /weather [arg1: city]
         # Gets the weather in just Lowell for now. Ignores the argument for city
