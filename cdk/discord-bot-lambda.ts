@@ -2,9 +2,12 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { DiscordBotLambdaStack } from './discord-bot-lambda-stack';
+import 'dotenv/config';
+
+require('dotenv').config()
 
 const app = new cdk.App();
-new DiscordBotLambdaStack(app, 'DiscordBotLambdaStack', {
+new DiscordBotLambdaStack(app, process.env.LAMBDA_FUNC ?? (() => { throw new Error("LAMBDA_FUNC is not set"); })(), {
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
