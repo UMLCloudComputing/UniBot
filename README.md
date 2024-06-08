@@ -135,6 +135,7 @@ Example of `.env` file.
 DISCORD_PUBLIC_KEY = <public key of discord bot>
 TOKEN=<secret token of bot>
 ID=<ID of bot>
+LAMBDA_FUNC=<name of your lambda function (can be anything)>
 ```
 8. Finally, run `cdk bootstrap` to setup the cdk project.
 
