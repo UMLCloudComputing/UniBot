@@ -42,7 +42,15 @@ def interact(raw_request):
             message_content = weather()
         elif command_name == "course":
             course_id = data["options"][0]["value"]
-            message_content = getCourse(course_id)
+            course_op = data["options"][1]["value"]
+            if course_op == "name":
+                message_content = getCourse(course_id)
+            elif course_op == "prereq":
+                message_content = getPre(course_id)
+            elif course_op == "credits":
+                message_content = getCr(course_id)
+            else:
+                message_content = "Incorrect option"
         elif command_name == "pizza":
             message_content = "PIZZA!"
 
@@ -67,3 +75,10 @@ def weather():
 
 def getCourse(courseID):
     return course.get_course_name(course.get_html_response(course.get_course_url(courseID)))
+
+def getPre(courseID):
+    return course.get_course_requirements_text(course.get_html_response(course.get_course_url(courseID)))
+
+def getCr(courseID):
+    dict = course.get_course_credits(course.get_html_response(course.get_course_url(courseID)))
+    return f"Credits: {dict['min']}"
