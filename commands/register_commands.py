@@ -2,6 +2,7 @@ import requests
 import yaml
 from dotenv import load_dotenv
 import os
+import time
 load_dotenv()
 
 TOKEN = os.getenv('TOKEN')
@@ -20,3 +21,4 @@ for command in commands:
     response = requests.post(URL, json=command, headers=headers)
     command_name = command["name"]
     print(f"Command {command_name} created: {response.status_code}")
+    time.sleep(3)
