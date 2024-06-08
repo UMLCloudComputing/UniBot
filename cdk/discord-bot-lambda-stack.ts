@@ -18,7 +18,9 @@ export class DiscordBotLambdaStack extends cdk.Stack {
         timeout: cdk.Duration.seconds(10),
         architecture: lambda.Architecture.X86_64,
         environment: {
-          DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("DISCORD_PUBLIC_KEY is not set"); })()
+          DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("DISCORD_PUBLIC_KEY is not set"); })(),
+          BEDROCK_ID: process.env.BEDROCK_ID ?? (() => { throw new Error("BEDROCK_ID is not set"); })(),
+          BEDROCK_KEY: process.env.BEDROCK_KEY ?? (() => { throw new Error("BEDROCK_KEY is not set"); })()
         },
       }
     );
