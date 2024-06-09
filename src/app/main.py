@@ -61,7 +61,7 @@ def interact(raw_request):
             callback_data = {
                 "type": 4,
                 "data": {
-                    "content": "Processing your request..."
+                    "content": ":sparkles: Rowdy is thinking :sparkles:"
                 }
             }
 
