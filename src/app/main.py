@@ -6,10 +6,6 @@ from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi
 from discord_interactions import verify_key_decorator
-import threading
-import json
-import boto3
-
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 
@@ -68,7 +64,8 @@ def interact(raw_request):
             response = requests.post(url, json=callback_data)
             original_message = data["options"][0]["value"]
             llm.invoke_llm(original_message, token)
-            message_content = f"Token {token} \n ID: {id}"
+            return
+            # message_content = f"Token {token} \n ID: {id}"
 
         # Command /weather [arg1: city]
         # Gets the weather in just Lowell for now. Ignores the argument for city
