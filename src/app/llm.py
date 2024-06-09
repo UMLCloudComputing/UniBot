@@ -2,10 +2,11 @@ import boto3
 import json
 # from dotenv import load_dotenv
 import os
+import requests
 
 # load_dotenv()
 
-def invoke_llm(input):
+def invoke_llm(input, token):
     bedrock = boto3.client(
         service_name='bedrock-runtime', 
         region_name='us-east-1',
@@ -32,6 +33,14 @@ def invoke_llm(input):
     response_body = json.loads(response.get('body').read())
     outputText = response_body.get('results')[0].get('outputText')
 
-    return outputText
+    print(token)
 
-print(invoke_llm("What is the equation for gravitational acceleration of a pendulum"))
+    url = f"https://discord.com/api/webhooks/1248706794008870967/{token}/messages/@original"
+
+    # JSON data to send with the request
+    data = {
+        "content": outputText
+    }
+
+    # Send the PATCH request
+    response = requests.patch(url, json=data)
