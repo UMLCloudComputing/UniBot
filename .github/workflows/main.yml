@@ -40,6 +40,7 @@ jobs:
         LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
         BEDROCK_ID: ${{secrets.BEDROCK_ID}}
         BEDROCK_KEY: ${{secrets.BEDROCK_KEY}}
+        ID: ${{secrets.ID}}
 
     - name: Deploy
       run: cdk deploy --all --require-approval never
@@ -51,4 +52,5 @@ jobs:
         LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
         BEDROCK_ID: ${{secrets.BEDROCK_ID}}
         BEDROCK_KEY: ${{secrets.BEDROCK_KEY}}
+        ID: ${{secrets.ID}}
 

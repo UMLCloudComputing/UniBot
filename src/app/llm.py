@@ -35,7 +35,9 @@ def invoke_llm(input, token):
 
     print(token)
 
-    url = f"https://discord.com/api/webhooks/1241285489969856514/{token}/messages/@original"
+    id = os.environ.get("ID")
+
+    url = f"https://discord.com/api/webhooks/{id}/{token}/messages/@original"
 
     # JSON data to send with the request
     data = {
