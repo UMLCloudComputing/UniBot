@@ -45,3 +45,6 @@ def invoke_llm(input, token):
 
     # Send the PATCH request
     response = requests.patch(url, json=data)
+
+    print("Response status code: ")
+    print(response.status_code)
