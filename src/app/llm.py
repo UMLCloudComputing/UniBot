@@ -1,10 +1,7 @@
 import boto3
 import json
-# from dotenv import load_dotenv
 import os
 import requests
-
-# load_dotenv()
 
 def invoke_llm(input, token):
     bedrock = boto3.client(
