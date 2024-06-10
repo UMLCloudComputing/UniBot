@@ -64,8 +64,7 @@ def interact(raw_request):
             response = requests.post(url, json=callback_data)
             original_message = data["options"][0]["value"]
             llm.invoke_llm(original_message, token)
-            return
-            # message_content = f"Token {token} \n ID: {id}"
+            message_content = "none"
 
         # Command /weather [arg1: city]
         # Gets the weather in just Lowell for now. Ignores the argument for city
