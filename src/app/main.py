@@ -50,21 +50,17 @@ def interact(raw_request):
             message_content = f"Echoing: {original_message}"
 
         # Command /chat [arg1: message]
-        # Will Integrate LLM later
         elif command_name == "chat":
-            url = f"https://discord.com/api/interactions/{id}/{token}/callback"
+            # Immediately send an interaction response back to discord to prevent a timeout
+            send(":sparkles: Rowdy is thinking :sparkles:", id, token)
 
-            callback_data = {
-                "type": 4,
-                "data": {
-                    "content": ":sparkles: Rowdy is thinking :sparkles:"
-                }
-            }
-
-            response = requests.post(url, json=callback_data)
+            # Invoke the LLM model
             original_message = data["options"][0]["value"]
-            llm.invoke_llm(original_message, token)
-            message_content = "none"
+            result = llm.invoke_llm(original_message, token)
+
+            # Edit the interaction response sent earlier
+            update(result, token)
+            message_content = "None"
 
         # Command /weather [arg1: city]
         # Gets the weather in just Lowell for now. Ignores the argument for city
@@ -102,3 +98,33 @@ def weather():
     forecast = data['properties']['periods'][0]
     return f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}"
 
+def send(message, id, token):
+    url = f"https://discord.com/api/interactions/{id}/{token}/callback"
+
+    callback_data = {
+        "type": 4,
+        "data": {
+            "content": message
+        }
+    }
+
+    response = requests.post(url, json=callback_data)
+    
+    print("Response status code: ")
+    print(response.status_code)
+
+def update(message, token):
+    app_id = os.environ.get("ID")
+
+    url = f"https://discord.com/api/webhooks/{app_id}/{token}/messages/@original"
+
+    # JSON data to send with the request
+    data = {
+        "content": message
+    }
+
+    # Send the PATCH request
+    response = requests.patch(url, json=data)
+
+    print("Response status code: ")
+    print(response.status_code)
