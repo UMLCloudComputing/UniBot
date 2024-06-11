@@ -51,11 +51,16 @@ def interact(raw_request):
 
         # Command /chat [arg1: message]
         elif command_name == "chat":
+            # Immediately send an interaction response back to discord to prevent a timeout
             send(":sparkles: Rowdy is thinking :sparkles:", id, token)
 
+            # Invoke the LLM model
             original_message = data["options"][0]["value"]
-            llm.invoke_llm(original_message, token)
-            message_content = "none"
+            result = llm.invoke_llm(original_message, token)
+
+            # Edit the interaction response sent earlier
+            update(result, token)
+            message_content = "None"
 
         # Command /weather [arg1: city]
         # Gets the weather in just Lowell for now. Ignores the argument for city
@@ -104,3 +109,22 @@ def send(message, id, token):
     }
 
     response = requests.post(url, json=callback_data)
+    
+    print("Response status code: ")
+    print(response.status_code)
+
+def update(message, token):
+    app_id = os.environ.get("ID")
+
+    url = f"https://discord.com/api/webhooks/{app_id}/{token}/messages/@original"
+
+    # JSON data to send with the request
+    data = {
+        "content": message
+    }
+
+    # Send the PATCH request
+    response = requests.patch(url, json=data)
+
+    print("Response status code: ")
+    print(response.status_code)

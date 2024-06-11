@@ -1,15 +1,16 @@
 import boto3
 import json
 import os
-import requests
+from dotenv import load_dotenv
 
-def invoke_llm(input, token):
+load_dotenv()
+
+def invoke_llm(input):
     bedrock = boto3.client(
         service_name='bedrock-runtime', 
         region_name='us-east-1',
-        aws_access_key_id=os.getenv("BEDROCK_ID"),
-        aws_secret_access_key=os.getenv("BEDROCK_KEY")
-        
+        aws_access_key_id=os.getenv('BEDROCK_ID'),
+        aws_secret_access_key=os.getenv('BEDROCK_KEY')
     )
 
     modelId = 'amazon.titan-text-lite-v1'
@@ -29,24 +30,8 @@ def invoke_llm(input, token):
 
     response_body = json.loads(response.get('body').read())
     outputText = response_body.get('results')[0].get('outputText')
-
-    print(token)
-
-    print(outputText)
-
     return outputText
 
-    # id = os.environ.get("ID")
-
-    # url = f"https://discord.com/api/webhooks/{id}/{token}/messages/@original"
-
-    # # JSON data to send with the request
-    # data = {
-    #     "content": outputText
-    # }
-
-    # # Send the PATCH request
-    # response = requests.patch(url, json=data)
-
-    # print("Response status code: ")
-    # print(response.status_code)
+while (1):
+    userInput = input("Enter input text\n")
+    print(invoke_llm(userInput))
