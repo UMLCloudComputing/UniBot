@@ -50,18 +50,9 @@ def interact(raw_request):
             message_content = f"Echoing: {original_message}"
 
         # Command /chat [arg1: message]
-        # Will Integrate LLM later
         elif command_name == "chat":
-            url = f"https://discord.com/api/interactions/{id}/{token}/callback"
+            send(":sparkles: Rowdy is thinking :sparkles:", id, token)
 
-            callback_data = {
-                "type": 4,
-                "data": {
-                    "content": ":sparkles: Rowdy is thinking :sparkles:"
-                }
-            }
-
-            response = requests.post(url, json=callback_data)
             original_message = data["options"][0]["value"]
             llm.invoke_llm(original_message, token)
             message_content = "none"
@@ -102,3 +93,14 @@ def weather():
     forecast = data['properties']['periods'][0]
     return f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}"
 
+def send(message, id, token):
+    url = f"https://discord.com/api/interactions/{id}/{token}/callback"
+
+    callback_data = {
+        "type": 4,
+        "data": {
+            "content": message
+        }
+    }
+
+    response = requests.post(url, json=callback_data)
