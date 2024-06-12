@@ -56,7 +56,7 @@ def interact(raw_request):
 
             # Invoke the LLM model
             original_message = data["options"][0]["value"]
-            result = llm.invoke_llm(original_message, token)
+            result = llm.invoke_llm(original_message)
 
             # Edit the interaction response sent earlier
             update(result, token)
