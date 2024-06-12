@@ -4,7 +4,31 @@ import boto3
 import json
 import os
 
+BEDROCK_ID = os.getenv("BEDROCK_ID")
+BEDROCK_KEY = os.getenv("BEDROCK_KEY")
+
 def invoke_llm(input):
+    bedrock = boto3.client(
+            service_name='bedrock-agent-runtime', 
+            region_name='us-east-1',
+            aws_access_key_id=BEDROCK_ID,
+            aws_secret_access_key=BEDROCK_KEY
+            
+    )
+    if decisionTree(housing(input)) == "yes":
+        return bedrock.retrieve_and_generate(
+            input={
+                'text': RAGTemplate(input)
+            },
+            retrieveAndGenerateConfiguration={
+                'type': 'KNOWLEDGE_BASE',
+                'knowledgeBaseConfiguration': {
+                    'knowledgeBaseId': "NW82KRCX5W",
+                    'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
+                    }
+                }
+            )["output"]["text"]
+
     list = course_process(input)
     bedrock = boto3.client(
         service_name='bedrock-runtime', 
@@ -132,6 +156,75 @@ def course_process(message):
         course_matches.append(course_id)
 
     return course_matches
+
+def decisionTree(message):
+
+    bedrock = boto3.client(
+        service_name='bedrock-runtime', 
+        region_name='us-east-1',
+        aws_access_key_id=BEDROCK_ID,
+        aws_secret_access_key=BEDROCK_KEY
+            
+    )
+
+    modelId = 'amazon.titan-text-premier-v1:0'
+    accept = 'application/json'
+    contentType = 'application/json'
+    body = json.dumps({
+        "inputText": message,
+        "textGenerationConfig":{
+            "maxTokenCount":512,
+            "stopSequences":[],
+            "temperature":0,
+            "topP":0.9
+            }
+    })
+
+    response = bedrock.invoke_model(body=body, modelId=modelId, accept=accept, contentType=contentType)
+
+    response_body = json.loads(response.get('body').read())
+    outputText = response_body.get('results')[0].get('outputText')
+    print(outputText)
+    return outputText
+
+
+def retrieveAndGenerate(input, kbId):
+    bedrock = boto3.client(
+            service_name='bedrock-agent-runtime', 
+            region_name='us-east-1',
+            aws_access_key_id=BEDROCK_ID,
+            aws_secret_access_key=BEDROCK_KEY
+            
+    )
+
+    if decisionTree(housing(input)) == "yes":
+        
+
+        return bedrock.retrieve_and_generate(
+            input={
+                'text': RAGTemplate(input)
+            },
+            retrieveAndGenerateConfiguration={
+                'type': 'KNOWLEDGE_BASE',
+                'knowledgeBaseConfiguration': {
+                    'knowledgeBaseId': kbId,
+                    'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
+                    }
+                }
+            )["output"]["text"]
+
+def housing(message):
+    prompt_template = '''\n
+    Is this statement asking about housing or living somewhere? Choose from the following:
+    yes, no.
+    '''
+    return message + prompt_template
+
+def RAGTemplate(message):
+    prompt_template = '''\n
+    You are a chatbot for the University of Massachusetts Lowell. Answer the question as if you a tour guide.
+    '''
+    return message + prompt_template
 
 
 
