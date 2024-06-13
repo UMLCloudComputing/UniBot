@@ -77,8 +77,7 @@ def interact(raw_request):
         # Fun little command that prints pizza.
         elif command_name == "pizza":
             message_content = "PIZZA! 🍕🍕🍕🍕🍕"
-        elif command_name == "dog":
-            message_content = dog()
+
         # Fire back a response to the user by making a json request
         response_data = {
             "type": 4,
@@ -129,10 +128,3 @@ def update(message, token):
 
     print("Response status code: ")
     print(response.status_code)
-
-def dog():
-    page = requests.get("https://dog.ceo/api/breeds/image/random").json()
-    if page["status"] != "success":
-        return "No dog :("
-    get_dog = page["message"]
-    return get_dog
