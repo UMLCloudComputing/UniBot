@@ -39,46 +39,53 @@ def interact(raw_request):
         # The command being execute
         command_name = data["name"]
 
-        # Command /hello
-        if command_name == "hello":
-            # message_content is the response to the user
-            message_content = "Hello there!"
+  
+        match command_name:
+            
+            # Command /hello
+            case "hello":
+                # message_content is the response to the user
+                message_content = "Hello there!"
 
-        # Command /echo
-        elif command_name == "echo":
-            original_message = data["options"][0]["value"]
-            message_content = f"Echoing: {original_message}"
+            # Command /echo
+            case "echo":
+                original_message = data["options"][0]["value"]
+                message_content = f"Echoing: {original_message}"
 
-        # Command /chat [arg1: message]
-        elif command_name == "chat":
-            # Immediately send an interaction response back to discord to prevent a timeout
-            send(":sparkles: Rowdy is thinking :sparkles:", id, token)
+            # Command /chat [arg1: message]
+            case "chat":
+                # Immediately send an interaction response back to discord to prevent a timeout
+                send(":sparkles: Rowdy is thinking :sparkles:", id, token)
 
-            # Invoke the LLM model
-            original_message = data["options"][0]["value"]
-            result = llm.invoke_llm(original_message)
+                # Invoke the LLM model
+                original_message = data["options"][0]["value"]
+                result = llm.invoke_llm(original_message)
 
-            # Edit the interaction response sent earlier
-            update(result, token)
-            message_content = "None"
+                # Edit the interaction response sent earlier
+                update(result, token)
+                message_content = "None"
 
-        # Command /weather [arg1: city]
-        # Gets the weather in just Lowell for now. Ignores the argument for city
-        elif command_name == "weather":
-            message_content = weather()
+            # Command /weather [arg1: city]
+            # Gets the weather in just Lowell for now. Ignores the argument for city
+            case "weather":
+                message_content = weather()
 
-        # Command /course [arg1: COURSE ID] [arg2: option]
-        elif command_name == "course":
-            course_id = data["options"][0]["value"]
-            course_op = data["options"][1]["value"]
-            message_content = course.course_info(course_op, course_id)
+            # Command /course [arg1: COURSE ID] [arg2: option]
+            case "course":
+                course_id = data["options"][0]["value"]
+                course_op = data["options"][1]["value"]
+                message_content = course.course_info(course_op, course_id)
 
-        # Command /pizza
-        # Fun little command that prints pizza.
-        elif command_name == "pizza":
-            message_content = "PIZZA! 🍕🍕🍕🍕🍕"
-        elif command_name == "dog":
-            message_content = dog()
+            # Command /pizza
+            # Fun little command that prints pizza.
+            case "pizza":
+                message_content = "PIZZA! 🍕🍕🍕🍕🍕"
+
+            # Command /dog
+            # Sends a link embedded within the link's image of a dog   
+            case "dog":
+                message_content = dog()
+        
         # Fire back a response to the user by making a json request
         response_data = {
             "type": 4,
@@ -131,8 +138,14 @@ def update(message, token):
     print(response.status_code)
 
 def dog():
+
+    # Request content of page, then parse it with JSON-to-Python-dictionary function called .json()
     page = requests.get("https://dog.ceo/api/breeds/image/random").json()
+    
+    # Check if page status is not success. If it is not success, then return a fixed message
     if page["status"] != "success":
         return "No dog :("
+    
+    # Otherwise, get the URL value in the "message" key of the page Python dictionary, then return the URL
     get_dog = page["message"]
     return get_dog
