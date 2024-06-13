@@ -28,9 +28,6 @@
 - name: pizza
   description: Prints out pizza 🍕
   
-- name: dog
-  description: See a dog!
-  
 - name: course
   description: Get information about an UML course
   options:
