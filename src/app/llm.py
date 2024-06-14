@@ -6,6 +6,7 @@ import os
 
 BEDROCK_ID = os.getenv("BEDROCK_ID")
 BEDROCK_KEY = os.getenv("BEDROCK_KEY")
+KNOWLEDGE = os.getenv("KNOWLEDGE_BASE_ID")
 
 def invoke_llm(input):
     list = course_process(input)
@@ -74,7 +75,7 @@ def invoke_llm(input):
             retrieveAndGenerateConfiguration={
                 'type': 'KNOWLEDGE_BASE',
                 'knowledgeBaseConfiguration': {
-                    'knowledgeBaseId': "WQZI02XZGW",
+                    'knowledgeBaseId': KNOWLEDGE,
                     'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
                     }
                 }

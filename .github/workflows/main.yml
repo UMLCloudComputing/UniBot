@@ -40,6 +40,7 @@ jobs:
         LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
         BEDROCK_ID: ${{secrets.BEDROCK_ID}}
         BEDROCK_KEY: ${{secrets.BEDROCK_KEY}}
+        KNOWLEDGE_BASE_ID: ${{secrets.KNOWLEDGE_BASE_ID}}
         ID: ${{secrets.ID}}
 
     - name: Deploy
@@ -52,5 +53,6 @@ jobs:
         LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
         BEDROCK_ID: ${{secrets.BEDROCK_ID}}
         BEDROCK_KEY: ${{secrets.BEDROCK_KEY}}
+        KNOWLEDGE_BASE_ID: ${{secrets.KNOWLEDGE_BASE_ID}}
         ID: ${{secrets.ID}}
 
