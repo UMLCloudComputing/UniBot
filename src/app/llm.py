@@ -74,7 +74,7 @@ def invoke_llm(input):
             retrieveAndGenerateConfiguration={
                 'type': 'KNOWLEDGE_BASE',
                 'knowledgeBaseConfiguration': {
-                    'knowledgeBaseId': "NW82KRCX5W",
+                    'knowledgeBaseId': "WQZI02XZGW",
                     'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
                     }
                 }
