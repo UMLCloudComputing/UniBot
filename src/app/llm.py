@@ -26,7 +26,7 @@ def invoke_llm(input):
     body = json.dumps({
         "inputText": truefalse,
         "textGenerationConfig":{
-            "maxTokenCount":512,
+            "maxTokenCount":256,
             "stopSequences":[],
             "temperature":0,
             "topP":0.9
@@ -43,7 +43,7 @@ def invoke_llm(input):
         body = json.dumps({
             "inputText": template_message(input),
             "textGenerationConfig":{
-                "maxTokenCount":512,
+                "maxTokenCount":256,
                 "stopSequences":[],
                 "temperature":0,
                 "topP":0.9
@@ -161,7 +161,7 @@ def decisionTree(message):
     body = json.dumps({
         "inputText": message,
         "textGenerationConfig":{
-            "maxTokenCount":512,
+            "maxTokenCount":256,
             "stopSequences":[],
             "temperature":0,
             "topP":0.9
