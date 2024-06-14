@@ -163,6 +163,17 @@ Click on the Titan Models category and request access to Titan Text G1 - Premier
 Now click on AWS Bedrock Knowledge Bases and create a Knowledge Base. You can use the Knowledge Base ID provided in "Setup" if you don't want to create one.
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/036664e0-ad62-43da-b5df-b9c19b92de36)
 
+Click on Next
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/997b5a96-7534-4494-ad23-dde9fa7fe428)
+
+Browse for an S3 Location, where you stored the files you would like to ingest into the Knowledge Base
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/d61869c9-9811-4cc8-92c7-949a68e0c92d)
+
+Select the Embeddings Model that is circled and select 1024 dimensions
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/311e4865-3f51-4679-8c44-0f4f6c54fcd2)
+
+Scroll down a bit and click Pinecone. Follow the Guide here to setup the rest of your knowledgebase https://docs.pinecone.io/integrations/amazon-bedrock
+
 ## 👉 Commands
 
 <details>
