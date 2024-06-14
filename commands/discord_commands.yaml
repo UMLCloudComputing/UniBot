@@ -39,3 +39,6 @@
       description: Type of information (name, credits, prereq)
       type: 3
       required: true
+
+- name: dog
+  description: Fetches a random dog image.
