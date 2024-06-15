@@ -16,7 +16,7 @@ export class DiscordBotLambdaStack extends cdk.Stack {
       {
         code: lambda.DockerImageCode.fromImageAsset("./src"),
         memorySize: 1024,
-        timeout: cdk.Duration.seconds(10),
+        timeout: cdk.Duration.seconds(600),
         architecture: lambda.Architecture.X86_64,
         environment: {
           DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("DISCORD_PUBLIC_KEY is not set"); })(),
