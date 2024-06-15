@@ -8,10 +8,13 @@ import os
 BEDROCK_ID = os.getenv("BEDROCK_ID")
 BEDROCK_KEY = os.getenv("BEDROCK_KEY")
 KNOWLEDGE = os.getenv("KNOWLEDGE_BASE_ID")
+MAX_TOKEN = os.getenv("MAX_TOKEN", 256)
 
 def invoke_llm(input):
+    # Check if the user is asking about a course
     isCourse = LLMTitanLite(isCourseAugment(input))
 
+    # Course specific question about UML
     if isCourse == "yes":
         # Regex that filters out course IDs
         list = course_process(input)
@@ -24,6 +27,7 @@ def invoke_llm(input):
             case "name": return course.course_info("name", list[0])
             case "credits": return course.course_info("credits", list[0])
 
+    # General question about UML
     else:
         return LLMTitanPremier(RAGTemplate(input))
 
@@ -43,7 +47,7 @@ def LLMTitanLite(input):
     body = json.dumps({
         "inputText": input,
         "textGenerationConfig":{
-            "maxTokenCount":256,
+            "maxTokenCount": MAX_TOKEN,
             "stopSequences":[],
             "temperature":0,
             "topP":0.9
