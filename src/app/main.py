@@ -6,6 +6,9 @@ from flask import Flask, jsonify, request
 from mangum import Mangum
 from asgiref.wsgi import WsgiToAsgi
 from discord_interactions import verify_key_decorator
+import json
+from nacl.signing import VerifyKey
+from nacl.exceptions import BadSignatureError
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 
@@ -13,15 +16,41 @@ app = Flask(__name__)
 asgi_app = WsgiToAsgi(app)
 handler = Mangum(asgi_app)
 
+def verify(event):
+    body = json.loads(event['body'])
+            
+    signature = event['headers']['x-signature-ed25519']
+    timestamp = event['headers']['x-signature-timestamp']
 
-@app.route("/", methods=["POST"])
-async def interactions():
-    print(f"👉 Request: {request.json}")
-    raw_request = request.json
-    return interact(raw_request)
+    # validate the interaction
+
+    verify_key = VerifyKey(bytes.fromhex(DISCORD_PUBLIC_KEY))
+
+    message = timestamp + event['body']
+
+    try:
+        verify_key.verify(message.encode(), signature=bytes.fromhex(signature))
+    except BadSignatureError:
+        print("Bad signature")
+        return False
+    return True
 
 
-@verify_key_decorator(DISCORD_PUBLIC_KEY)
+def handler(event, context):
+    try:
+        # Verify the cryptographic Signature
+        if not verify(event):
+            return {'statusCode': 401, 'body': json.dumps('Unauthorized')}
+
+        body = json.loads(event['body'])
+
+        if body['type'] == 1:
+            return {'statusCode': 200, 'body': json.dumps({'type': 1})}
+        else:
+            return interact(body)
+    except:
+        raise
+
 def interact(raw_request):
 
     # Let discord know that this bot is alive
@@ -86,13 +115,9 @@ def interact(raw_request):
             case "dog":
                 message_content = dog()
         
-        # Fire back a response to the user by making a json request
-        response_data = {
-            "type": 4,
-            "data": {"content": message_content},
-        }
 
-    return jsonify(response_data)
+    send(message_content, id, token)  # Send the message back to Discord
+    return {}
 
 
 if __name__ == "__main__":

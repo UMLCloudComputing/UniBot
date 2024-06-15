@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import 'dotenv/config';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
 require('dotenv').config()
 
@@ -27,6 +28,11 @@ export class DiscordBotLambdaStack extends cdk.Stack {
       }
     );
 
+    const api = new apigateway.LambdaRestApi(this, 'HelloWorldApi', {
+      handler: dockerFunction,
+      proxy: true,
+    });
+
     const functionUrl = dockerFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
       cors: {
@@ -39,5 +45,9 @@ export class DiscordBotLambdaStack extends cdk.Stack {
     new cdk.CfnOutput(this, "FunctionUrl", {
       value: functionUrl.url,
     });
+
+    new cdk.CfnOutput(this, "ApiGatewayUrl", {
+      value: api.url,
+    }); 
   }
 }
