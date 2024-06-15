@@ -2,6 +2,7 @@ import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import 'dotenv/config';
+import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 
 require('dotenv').config()
 
@@ -15,7 +16,7 @@ export class DiscordBotLambdaStack extends cdk.Stack {
       {
         code: lambda.DockerImageCode.fromImageAsset("./src"),
         memorySize: 1024,
-        timeout: cdk.Duration.seconds(10),
+        timeout: cdk.Duration.seconds(600),
         architecture: lambda.Architecture.X86_64,
         environment: {
           DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("DISCORD_PUBLIC_KEY is not set"); })(),
@@ -26,6 +27,11 @@ export class DiscordBotLambdaStack extends cdk.Stack {
         },
       }
     );
+
+    const api = new apigateway.LambdaRestApi(this, `InteractionsAPI${id}`, {
+      handler: dockerFunction,
+      proxy: true,
+    });
 
     const functionUrl = dockerFunction.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,
@@ -39,5 +45,9 @@ export class DiscordBotLambdaStack extends cdk.Stack {
     new cdk.CfnOutput(this, "FunctionUrl", {
       value: functionUrl.url,
     });
+
+    new cdk.CfnOutput(this, "ApiGatewayUrl", {
+      value: api.url,
+    }); 
   }
 }
