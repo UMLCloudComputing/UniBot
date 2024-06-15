@@ -10,7 +10,7 @@ BEDROCK_KEY = os.getenv("BEDROCK_KEY")
 KNOWLEDGE = os.getenv("KNOWLEDGE_BASE_ID")
 
 def invoke_llm(input):
-    isCourse = LLMTitanLite(input + isCourseAugment(input))
+    isCourse = LLMTitanLite(isCourseAugment(input))
 
     if isCourse == "yes":
         # Regex that filters out course IDs
