@@ -28,7 +28,7 @@ export class DiscordBotLambdaStack extends cdk.Stack {
       }
     );
 
-    const api = new apigateway.LambdaRestApi(this, 'HelloWorldApi', {
+    const api = new apigateway.LambdaRestApi(this, `InteractionsAPI${id}`, {
       handler: dockerFunction,
       proxy: true,
     });
