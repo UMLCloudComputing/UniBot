@@ -2,23 +2,13 @@ import os
 import requests
 import llm
 import course
-from flask import Flask, jsonify, request
-from mangum import Mangum
-from asgiref.wsgi import WsgiToAsgi
-from discord_interactions import verify_key_decorator
 import json
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 
-app = Flask(__name__)
-asgi_app = WsgiToAsgi(app)
-handler = Mangum(asgi_app)
-
 def verify(event):
-    body = json.loads(event['body'])
-            
     signature = event['headers']['x-signature-ed25519']
     timestamp = event['headers']['x-signature-timestamp']
 
@@ -118,10 +108,6 @@ def interact(raw_request):
 
     send(message_content, id, token)  # Send the message back to Discord
     return {}
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 # You can define dedicated functions for commands as well
 
