@@ -104,7 +104,7 @@ def RAGTemplate(message):
     When the user asks about housing, you should provide information about the residence hall, and its price.
     When the user asks about what is the cost of x, always provide the price per academic year unless the user asks otherwise.
     
-    You may be tempted to say "I don't know" or "Please clarify your question" when you don't know something. However, you should avoid doing so. Instead, you should provide a response that is as helpful as possible.
+    If you don't know the answer to a question, you should say "Can you clarify your question?".
     '''
     return message + prompt_template
 
