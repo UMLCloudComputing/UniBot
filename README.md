@@ -130,6 +130,7 @@ Public Key:
 
 
 7. Save them in a `.env` file like the one below:
+(Note: You can use the same IAM user for Bedrock, CDK, and S3 if you wish.)
 
 Example of `.env` file.
 ```
@@ -140,6 +141,8 @@ LAMBDA_FUNC=<name of your lambda function (can be anything)>
 BEDROCK_ID=<bedrock IAM user ID>
 BEDROCK_KEY=<bedrock IAM user key>
 KNOWLEDGE_BASE_ID=<Amazon Bedrock Knowledge Base ID. Put AZR9D11EGV if you don't have your own Knowledge Base>
+S3_ID=<S3 IAM user ID>
+S3_Key=<S3 IAM user key>
 ```
 8. Finally, run `cdk bootstrap` to setup the cdk project.
 
