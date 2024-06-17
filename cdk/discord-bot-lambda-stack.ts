@@ -24,6 +24,8 @@ export class DiscordBotLambdaStack extends cdk.Stack {
           BEDROCK_KEY: process.env.BEDROCK_KEY ?? (() => { throw new Error("BEDROCK_KEY is not set"); })(),
           ID: process.env.ID ?? (() => { throw new Error("BEDROCK_KEY is not set"); })(),
           KNOWLEDGE_BASE_ID: process.env.KNOWLEDGE_BASE_ID ?? (() => { throw new Error("KNOWLEDGE_BASE_ID is not set"); })(),
+          S3_ID: process.env.S3_ID ?? (() => { throw new Error("S3_ID is not set"); })(),
+          S3_KEY: process.env.S3_KEY ?? (() => { throw new Error("S3_KEY is not set"); })(),
         },
       }
     );

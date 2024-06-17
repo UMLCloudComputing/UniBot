@@ -7,6 +7,8 @@ import os
 
 BEDROCK_ID = os.getenv("BEDROCK_ID")
 BEDROCK_KEY = os.getenv("BEDROCK_KEY")
+S3_ID = os.getenv("S3_ID")
+S3_KEY = os.getenv("S3_KEY")
 KNOWLEDGE = os.getenv("KNOWLEDGE_BASE_ID")
 MAX_TOKEN = os.getenv("MAX_TOKEN", 256)
 
@@ -68,7 +70,7 @@ def LLMTitanPremier(input):
         aws_secret_access_key=BEDROCK_KEY
             
     )   
-    return bedrock.retrieve_and_generate(
+    bedrockObj = bedrock.retrieve_and_generate(
         input={
             'text': input
         },
@@ -79,7 +81,34 @@ def LLMTitanPremier(input):
                 'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
                 }
             }
-        )["output"]["text"]
+        )
+    
+    returnString = bedrockObj['output']['text']
+
+    for citation in bedrockObj['citations']:
+        for reference in citation['retrievedReferences']:
+            uri = reference['location']['s3Location']['uri']
+
+    filename = extract_filename(uri)
+    metadata = filename + ".json"
+
+    print(metadata)
+
+    s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
+    obj = s3.get_object(Bucket='rowdysources', Key=metadata)
+    data = json.loads(obj['Body'].read().decode('utf-8'))
+
+    return returnString + "\n" + "Citations: " + data['url']
+
+def extract_filename(s3_uri):
+    # Regex pattern to match the filename at the end of the URI
+    pattern = r'[^/]+$'
+    # Search for the pattern in the URI and extract the filename
+    match = re.search(pattern, s3_uri)
+    if match:
+        return match.group()
+    else:
+        return None
 
 # Augmented Prompts
 def UMLNowAugment(message):
