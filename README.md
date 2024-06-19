@@ -143,12 +143,18 @@ BEDROCK_KEY=<bedrock IAM user key>
 KNOWLEDGE_BASE_ID=<Amazon Bedrock Knowledge Base ID. Put AZR9D11EGV if you don't have your own Knowledge Base>
 S3_ID=<S3 IAM user ID>
 S3_Key=<S3 IAM user key>
+CITATION_BUCKET=<Bucket where you keep filename.extension.json files that cite the URL sources of the corresponding filenames in the Knowledge Base S3 bucket>
+AGENT_ID=<Amazon Bedrock Agent ID> (you can set this to 0USUGYMLKE if you're not sure)
+AGENT_ALIAS=<Amazon Bedrock Agent Alias> (you can set this to V29LY73MJ7 if you're not sure)
 ```
 8. Finally, run `cdk bootstrap` to setup the cdk project.
 
 </details>
 
 ## 🪨 Setting up Amazon Bedrock
+
+<details>
+<summary>Setup</summary>
 
 1. Head to your main AWS Dashboard and search for Amazon Bedrock. Click on Amazon Bedrock
 
@@ -176,6 +182,8 @@ Select the Embeddings Model that is circled and select 1024 dimensions
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/311e4865-3f51-4679-8c44-0f4f6c54fcd2)
 
 Scroll down a bit and click Pinecone. Follow the Guide here to setup the rest of your knowledgebase https://docs.pinecone.io/integrations/amazon-bedrock
+
+</details>
 
 ## 👉 Commands
 
