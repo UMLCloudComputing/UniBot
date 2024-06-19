@@ -144,8 +144,8 @@ KNOWLEDGE_BASE_ID=<Amazon Bedrock Knowledge Base ID. Put AZR9D11EGV if you don't
 S3_ID=<S3 IAM user ID>
 S3_Key=<S3 IAM user key>
 CITATION_BUCKET=<Bucket where you keep filename.extension.json files that cite the URL sources of the corresponding filenames in the Knowledge Base S3 bucket>
-AGENT_ID=<Amazon Bedrock Agent ID> (you can set this to 0USUGYMLKE if you're not sure)
-AGENT_ALIAS=<Amazon Bedrock Agent Alias> (you can set this to V29LY73MJ7 if you're not sure)
+AGENT_ID=<Amazon Bedrock Agent ID>
+AGENT_ALIAS=<Amazon Bedrock Agent Alias>
 ```
 8. Finally, run `cdk bootstrap` to setup the cdk project.
 
