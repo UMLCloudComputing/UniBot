@@ -29,9 +29,15 @@ def invoke_llm(input):
             case "name": return course.course_info("name", list[0])
             case "credits": return course.course_info("credits", list[0])
 
+    isCost = LLMTitanLite(cost(input))
+    print(isCost)
+
+    if isCost == "yes":
+        return LLMTitanPremier(input, "QP7VVBWZY8")
+
     # General question about UML
     else:
-        return LLMTitanPremier(RAGTemplate(input))
+        return LLMTitanPremier(RAGTemplate(input), KNOWLEDGE)
 
 # Call The Titan Lite Model (No RAG Capabilities, only for decision making and scraping UML Now)
 def LLMTitanLite(input):
@@ -62,7 +68,7 @@ def LLMTitanLite(input):
     return response_body.get('results')[0].get('outputText')
 
 # Call the Titan Premier Model (RAG Capabilities)
-def LLMTitanPremier(input):
+def LLMTitanPremier(input, knowledge):
     bedrock = boto3.client(
         service_name='bedrock-agent-runtime', 
         region_name='us-east-1',
@@ -77,7 +83,7 @@ def LLMTitanPremier(input):
         retrieveAndGenerateConfiguration={
             'type': 'KNOWLEDGE_BASE',
             'knowledgeBaseConfiguration': {
-                'knowledgeBaseId': KNOWLEDGE,
+                'knowledgeBaseId': knowledge,
                 'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
                 }
             }
@@ -111,6 +117,14 @@ def extract_filename(s3_uri):
         return None
 
 # Augmented Prompts
+
+def cost(message):
+    prompt_template = '''\n
+    Does the statement above ask about cost? Choose from the following:
+    yes, no
+    '''
+    return message + prompt_template
+
 def UMLNowAugment(message):
 
     prompt_template3 = '''\n
@@ -131,7 +145,6 @@ def RAGTemplate(message):
     You are a chatbot for the University of Massachusetts Lowell. Answer the question as if you a tour guide.
 
     When the user asks about housing, you should provide information about the residence hall, and its price.
-    When the user asks about what is the cost of x, always provide the price per academic year unless the user asks otherwise.
     
     If you don't know the answer to a question, you should say "Can you clarify your question?".
     '''
