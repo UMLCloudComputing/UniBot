@@ -89,9 +89,24 @@ def LLMTitanPremier(input, knowledge):
 
     eventStream = bedrockObj['completion']
     for event in eventStream:
+        print(event)
         if 'chunk' in event:
             data = event['chunk']['bytes'].decode('utf-8')
             returnString = data
+        if 'attribution' in event['chunk']:
+            for citations in event['chunk']['attribution']['citations']:
+                for references in citations['retrievedReferences']:
+                    uri = references['location']['s3Location']['uri']
+                    filename = extract_filename(uri)
+                    metadata = filename + ".json"
+
+                    print(metadata)
+
+                    s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
+                    obj = s3.get_object(Bucket='rowdysources', Key=metadata)
+                    data = json.loads(obj['Body'].read().decode('utf-8'))
+
+                    returnString = returnString + "\n" + data['url']
 
     # for citation in bedrockObj['citations']:
     #     for reference in citation['retrievedReferences']:
