@@ -11,6 +11,9 @@ S3_ID = os.getenv("S3_ID")
 S3_KEY = os.getenv("S3_KEY")
 KNOWLEDGE = os.getenv("KNOWLEDGE_BASE_ID")
 MAX_TOKEN = os.getenv("MAX_TOKEN", 256)
+AGENT_ALIAS = os.getenv("AGENT_ALIAS")
+AGENT_ID = os.getenv("AGENT_ID")
+CITATION_BUCKET = os.getenv("CITATION_BUCKET")
 
 def invoke_llm(input):
     # Check if the user is asking about a course
@@ -29,15 +32,8 @@ def invoke_llm(input):
             case "name": return course.course_info("name", list[0])
             case "credits": return course.course_info("credits", list[0])
 
-    isCost = LLMTitanLite(cost(input))
-    print(isCost)
-
-    if isCost == "yes":
-        return LLMTitanPremier(input, "QP7VVBWZY8")
-
-    # General question about UML
     else:
-        return LLMTitanPremier(RAGTemplate(input), KNOWLEDGE)
+        return LLMTitanPremier(input)
 
 # Call The Titan Lite Model (No RAG Capabilities, only for decision making and scraping UML Now)
 def LLMTitanLite(input):
@@ -68,7 +64,7 @@ def LLMTitanLite(input):
     return response_body.get('results')[0].get('outputText')
 
 # Call the Titan Premier Model (RAG Capabilities)
-def LLMTitanPremier(input, knowledge):
+def LLMTitanPremier(input):
     bedrock = boto3.client(
         service_name='bedrock-agent-runtime', 
         region_name='us-east-1',
@@ -77,13 +73,11 @@ def LLMTitanPremier(input, knowledge):
             
     )   
     bedrockObj = bedrock.invoke_agent (
-        agentAliasId='V29LY73MJ7',
-        agentId='0USUGYMLKE',
+        agentAliasId=AGENT_ALIAS,
+        agentId=AGENT_ID,
         inputText=input,
         sessionId="testingsession12345"
     )
-    
-    # returnString = bedrockObj['chunk']['bytes'].decode('utf-8')
 
     print(bedrockObj)
 
@@ -107,19 +101,6 @@ def LLMTitanPremier(input, knowledge):
                     data = json.loads(obj['Body'].read().decode('utf-8'))
 
                     returnString = returnString + "\n" + data['url']
-
-    # for citation in bedrockObj['citations']:
-    #     for reference in citation['retrievedReferences']:
-    #         uri = reference['location']['s3Location']['uri']
-
-    # filename = extract_filename(uri)
-    # metadata = filename + ".json"
-
-    # print(metadata)
-
-    # s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
-    # obj = s3.get_object(Bucket='rowdysources', Key=metadata)
-    # data = json.loads(obj['Body'].read().decode('utf-8'))
 
     return returnString + "\n"
 

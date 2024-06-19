@@ -26,6 +26,9 @@ export class DiscordBotLambdaStack extends cdk.Stack {
           KNOWLEDGE_BASE_ID: process.env.KNOWLEDGE_BASE_ID ?? (() => { throw new Error("KNOWLEDGE_BASE_ID is not set"); })(),
           S3_ID: process.env.S3_ID ?? (() => { throw new Error("S3_ID is not set"); })(),
           S3_KEY: process.env.S3_KEY ?? (() => { throw new Error("S3_KEY is not set"); })(),
+          AGENT_ALIAS: process.env.AGENT_ALIAS ?? (() => { throw new Error("AGENT_ALIAS is not set"); })(),
+          AGENT_ID: process.env.AGENT_ID ?? (() => { throw new Error("AGENT_ID is not set"); })(),
+          CITATION_BUCKET: process.env.CITATION_BUCKET ?? (() => { throw new Error("CITATION_BUCKET is not set"); })(),
         },
       }
     );
