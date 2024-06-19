@@ -76,35 +76,37 @@ def LLMTitanPremier(input, knowledge):
         aws_secret_access_key=BEDROCK_KEY
             
     )   
-    bedrockObj = bedrock.retrieve_and_generate(
-        input={
-            'text': input
-        },
-        retrieveAndGenerateConfiguration={
-            'type': 'KNOWLEDGE_BASE',
-            'knowledgeBaseConfiguration': {
-                'knowledgeBaseId': knowledge,
-                'modelArn': 'arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-text-premier-v1:0'
-                }
-            }
-        )
+    bedrockObj = bedrock.invoke_agent (
+        agentAliasId='V29LY73MJ7',
+        agentId='0USUGYMLKE',
+        inputText=input,
+        sessionId="testingsession1234"
+    )
     
-    returnString = bedrockObj['output']['text']
+    # returnString = bedrockObj['chunk']['bytes'].decode('utf-8')
 
-    for citation in bedrockObj['citations']:
-        for reference in citation['retrievedReferences']:
-            uri = reference['location']['s3Location']['uri']
+    print(bedrockObj)
 
-    filename = extract_filename(uri)
-    metadata = filename + ".json"
+    eventStream = bedrockObj['completion']
+    for event in eventStream:
+        if 'chunk' in event:
+            data = event['chunk']['bytes'].decode('utf-8')
+            returnString = data
 
-    print(metadata)
+    # for citation in bedrockObj['citations']:
+    #     for reference in citation['retrievedReferences']:
+    #         uri = reference['location']['s3Location']['uri']
 
-    s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
-    obj = s3.get_object(Bucket='rowdysources', Key=metadata)
-    data = json.loads(obj['Body'].read().decode('utf-8'))
+    # filename = extract_filename(uri)
+    # metadata = filename + ".json"
 
-    return returnString + "\n" + "Citations: " + data['url']
+    # print(metadata)
+
+    # s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
+    # obj = s3.get_object(Bucket='rowdysources', Key=metadata)
+    # data = json.loads(obj['Body'].read().decode('utf-8'))
+
+    return returnString + "\n"
 
 def extract_filename(s3_uri):
     # Regex pattern to match the filename at the end of the URI
