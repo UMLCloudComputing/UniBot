@@ -80,7 +80,7 @@ def LLMTitanPremier(input, knowledge):
         agentAliasId='V29LY73MJ7',
         agentId='0USUGYMLKE',
         inputText=input,
-        sessionId="testingsession1234"
+        sessionId="testingsession12345"
     )
     
     # returnString = bedrockObj['chunk']['bytes'].decode('utf-8')
