@@ -15,7 +15,7 @@ AGENT_ALIAS = os.getenv("AGENT_ALIAS")
 AGENT_ID = os.getenv("AGENT_ID")
 CITATION_BUCKET = os.getenv("CITATION_BUCKET")
 
-def invoke_llm(input):
+def invoke_llm(input, userID):
     # Check if the user is asking about a course
     isCourse = LLMTitanLite(isCourseAugment(input))
 
@@ -33,7 +33,7 @@ def invoke_llm(input):
             case "credits": return course.course_info("credits", list[0])
 
     else:
-        return LLMTitanPremier(input)
+        return LLMTitanPremier(input, userID)
 
 # Call The Titan Lite Model (No RAG Capabilities, only for decision making and scraping UML Now)
 def LLMTitanLite(input):
@@ -64,7 +64,7 @@ def LLMTitanLite(input):
     return response_body.get('results')[0].get('outputText')
 
 # Call the Titan Premier Model (RAG Capabilities)
-def LLMTitanPremier(input):
+def LLMTitanPremier(input, userID):
     bedrock = boto3.client(
         service_name='bedrock-agent-runtime', 
         region_name='us-east-1',
@@ -76,7 +76,7 @@ def LLMTitanPremier(input):
         agentAliasId=AGENT_ALIAS,
         agentId=AGENT_ID,
         inputText=input,
-        sessionId="testingsession12345"
+        sessionId=userID
     )
 
     print(bedrockObj)
