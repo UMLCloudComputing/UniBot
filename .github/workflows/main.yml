@@ -46,6 +46,7 @@ jobs:
         ID: ${{secrets.ID}}
         AGENT_ID: ${{secrets.AGENT_ID}}
         AGENT_ALIAS: ${{secrets.AGENT_ALIAS}}
+        CITATION_BUCKET: ${{secrets.CITATION_BUCKET}}
 
     - name: Deploy
       run: cdk deploy --all --require-approval never
@@ -63,4 +64,5 @@ jobs:
         ID: ${{secrets.ID}}
         AGENT_ID: ${{secrets.AGENT_ID}}
         AGENT_ALIAS: ${{secrets.AGENT_ALIAS}}
+        CITATION_BUCKET: ${{secrets.CITATION_BUCKET}}
 
