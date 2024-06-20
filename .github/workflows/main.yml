@@ -44,6 +44,8 @@ jobs:
         S3_KEY: ${{secrets.S3_KEY}}
         KNOWLEDGE_BASE_ID: ${{secrets.KNOWLEDGE_BASE_ID}}
         ID: ${{secrets.ID}}
+        AGENT_ID: ${{secrets.AGENT_ID}}
+        AGENT_ALIAS: ${{secrets.AGENT_ALIAS}}
 
     - name: Deploy
       run: cdk deploy --all --require-approval never
@@ -59,4 +61,6 @@ jobs:
         S3_KEY: ${{secrets.S3_KEY}}
         KNOWLEDGE_BASE_ID: ${{secrets.KNOWLEDGE_BASE_ID}}
         ID: ${{secrets.ID}}
+        AGENT_ID: ${{secrets.AGENT_ID}}
+        AGENT_ALIAS: ${{secrets.AGENT_ALIAS}}
 
