@@ -54,6 +54,8 @@ def interact(raw_request):
         data = raw_request["data"]
         token = raw_request["token"]
         id = raw_request["id"]
+        userID = raw_request["member"]["user"]["id"]
+        print(userID)
 
         # The command being execute
         command_name = data["name"]
@@ -78,7 +80,7 @@ def interact(raw_request):
 
                 # Invoke the LLM model
                 original_message = data["options"][0]["value"]
-                result = llm.invoke_llm(original_message)
+                result = llm.invoke_llm(original_message, userID)
 
                 # Edit the interaction response sent earlier
                 update(result, token)
