@@ -97,7 +97,7 @@ def LLMTitanPremier(input, userID):
                     print(metadata)
 
                     s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
-                    obj = s3.get_object(Bucket='rowdysources', Key=metadata)
+                    obj = s3.get_object(Bucket=CITATION_BUCKET, Key=metadata)
                     data = json.loads(obj['Body'].read().decode('utf-8'))
 
                     returnString = returnString + "\n" + data['url']
