@@ -3,10 +3,12 @@ import requests
 import llm
 import course
 import json
+import db
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
+MAX_QUERIES = 10
 
 def verify(event):
     signature = event['headers']['x-signature-ed25519']
@@ -75,16 +77,30 @@ def interact(raw_request):
 
             # Command /chat [arg1: message]
             case "chat":
-                # Immediately send an interaction response back to discord to prevent a timeout
-                send(":sparkles: Rowdy is thinking :sparkles:", id, token)
 
-                # Invoke the LLM model
-                original_message = data["options"][0]["value"]
-                result = llm.invoke_llm(original_message, userID)
+                if db.get_item(userID) == -1:
+                    db.add_item(userID, 0)
+                
+                if db.get_item(userID) >= MAX_QUERIES:
+                    message_content = "You have reached the limit of 10 queries per day. Please wait for a while.\n"
+                    message_content += ":red_circle: 10 / 10"
+                else:
+                    # Immediately send an interaction response back to discord to prevent a timeout
+                    send(":sparkles: Rowdy is thinking :sparkles:", id, token)
 
-                # Edit the interaction response sent earlier
-                update(result, token)
-                message_content = "None"
+                    # Invoke the LLM model
+                    original_message = data["options"][0]["value"]
+                    result = llm.invoke_llm(original_message, userID)
+
+                    result += "\n :green_circle: " + str(db.get_item(userID) + 1) + " / 10"
+
+                    # Edit the interaction response sent earlier
+                    update(result, token)
+
+                    newCount = db.get_item(userID) + 1
+                    db.add_item(userID, newCount)
+
+                    message_content = "None"
 
             # Command /weather [arg1: city]
             # Gets the weather in just Lowell for now. Ignores the argument for city
