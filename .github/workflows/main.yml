@@ -40,6 +40,8 @@ jobs:
         LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
         BEDROCK_ID: ${{secrets.BEDROCK_ID}}
         BEDROCK_KEY: ${{secrets.BEDROCK_KEY}}
+        DYNAMO_ID: ${{secrets.DYNAMO_ID}}
+        DYNAMO_KEY: ${{secrets.DYNAMO_KEY}}
         S3_ID: ${{secrets.S3_ID}}
         S3_KEY: ${{secrets.S3_KEY}}
         KNOWLEDGE_BASE_ID: ${{secrets.KNOWLEDGE_BASE_ID}}
@@ -60,6 +62,8 @@ jobs:
         BEDROCK_KEY: ${{secrets.BEDROCK_KEY}}
         S3_ID: ${{secrets.S3_ID}}
         S3_KEY: ${{secrets.S3_KEY}}
+        DYNAMO_ID: ${{secrets.DYNAMO_ID}}
+        DYNAMO_KEY: ${{secrets.DYNAMO_KEY}}
         KNOWLEDGE_BASE_ID: ${{secrets.KNOWLEDGE_BASE_ID}}
         ID: ${{secrets.ID}}
         AGENT_ID: ${{secrets.AGENT_ID}}
