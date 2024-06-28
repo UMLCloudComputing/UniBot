@@ -59,17 +59,37 @@ def update_bucket(url, bucket_name, source_bucket):
 
     return filename
 
-st.title('HTML Downloader')
+st.title('Knowledge Base Tools')
 
 url = st.text_input('Enter the URL')
+
+if st.button("Add URL to database"):
+    with open('urls.json', 'r') as file:
+        data = json.load(file)
+        data['urls'].append(url)
+    
+    with open('urls.json', 'w') as file:
+        json.dump(data, file)
+    
+    st.success('URL added to database.')
 
 bucket = st.text_input('Enter the bucket name')
 source = st.text_input('Enter the metadata bucket name')
 
+with open('urls.json', 'r') as file:
+    data = json.load(file)
+    
+    urls = data['urls']
+
+    with st.sidebar:
+        st.write("### URLs from JSON file:")
+        for index, url in enumerate(urls, start=1):
+            st.write(f"{index}. {url}")
+
 if st.button("Load from Database"):
     load_from_database(bucket, source)
 
-if st.button('Upload to S3 Bucket'):
+if st.button('Add URL directly to S3'):
     if url:
         filename = update_bucket(url, bucket, source)
         st.success(f'Downloaded and saved as {filename} and {filename}.json')
