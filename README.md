@@ -95,8 +95,6 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 - [Node.JS](https://github.com/nvm-sh/nvm)
 - Python `sudo apt install python3`
 - AWS CDK `npm install -g aws-cdk`
-- Flask `pip install flask`
-- Discord Interactions `pip install discord-interactions`
 - Pyyaml `pip install pyyaml`
 - Requests `pip install requests`
 
@@ -140,7 +138,6 @@ ID=<ID of bot>
 LAMBDA_FUNC=<name of your lambda function (can be anything)>
 BEDROCK_ID=<bedrock IAM user ID>
 BEDROCK_KEY=<bedrock IAM user key>
-KNOWLEDGE_BASE_ID=<Amazon Bedrock Knowledge Base ID>
 S3_ID=<S3 IAM user ID>
 S3_Key=<S3 IAM user key>
 CITATION_BUCKET=<Bucket where you keep filename.extension.json files that cite the URL sources of the corresponding filenames in the Knowledge Base S3 bucket>

@@ -1,10 +1,1 @@
-{
-    "urls": [
-        "https://www.uml.edu/about/leadership/",
-        "https://www.uml.edu/student-services/reslife/housing/housing-food-rates.aspx",
-        "https://www.uml.edu/student-services/reslife/residence-halls/",
-        "https://www.uml.edu/thesolutioncenter/bill/tuition-fees/undergraduate/",
-        "https://www.uml.edu/about/mission.aspx",
-        "https://www.uml.edu/student-services/reslife/housing/housing-faq.aspx"
-    ]
-}
+{"urls": ["https://www.uml.edu/about/leadership/", "https://www.uml.edu/student-services/reslife/housing/housing-food-rates.aspx", "https://www.uml.edu/student-services/reslife/residence-halls/", "https://www.uml.edu/thesolutioncenter/bill/tuition-fees/undergraduate/", "https://www.uml.edu/about/mission.aspx", "https://www.uml.edu/student-services/reslife/housing/housing-faq.aspx", "https://www.uml.edu/msb/about-us/", "https://www.uml.edu/msb/about-us/accreditation.aspx"]}
