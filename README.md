@@ -170,7 +170,7 @@ AWS_ACCESS_KEY_ID=<AWS Access Key ID>
 AWS_SECRET_ACCESS_KEY=<AWS Access Secret Key>
 
 # Resource IDs
-LAMBDA_FUNC=<Lambda Function Name>
+LAMBDA_FUNC=<Lambda Function Name (name this whatever you want)>
 DYNAMO_TABLE=<Name of your DynamoDB Table>
 CITATION_BUCKET=<Name of your Citations Database (optional)>
 AGENT_ID=<ID of the Amazon Bedrock Agent>
