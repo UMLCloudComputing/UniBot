@@ -19,17 +19,13 @@ export class DiscordBotLambdaStack extends cdk.Stack {
         timeout: cdk.Duration.seconds(600),
         architecture: lambda.Architecture.X86_64,
         environment: {
-          DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("DISCORD_PUBLIC_KEY is not set"); })(),
-          BEDROCK_ID: process.env.BEDROCK_ID ?? (() => { throw new Error("BEDROCK_ID is not set"); })(),
-          BEDROCK_KEY: process.env.BEDROCK_KEY ?? (() => { throw new Error("BEDROCK_KEY is not set"); })(),
-          ID: process.env.ID ?? (() => { throw new Error("BEDROCK_KEY is not set"); })(),
-          S3_ID: process.env.S3_ID ?? (() => { throw new Error("S3_ID is not set"); })(),
-          S3_KEY: process.env.S3_KEY ?? (() => { throw new Error("S3_KEY is not set"); })(),
+          AWS_ID: process.env.AWS_ACCESS_KEY_ID ?? (() => { throw new Error("AWS_ACCESS_KEY_ID is not set"); })(),
+          AWS_KEY: process.env.AWS_SECRET_ACCESS_KEY ?? (() => { throw new Error("AWS_SECRET_ACCESS_KEY is not set"); })(),
+          ID: process.env.ID ?? (() => { throw new Error("Discord Bot ID is not set"); })(),
+          DISCORD_PUBLIC_KEY: process.env.DISCORD_PUBLIC_KEY ?? (() => { throw new Error("Discord Public Key is not set"); })(),
           AGENT_ALIAS: process.env.AGENT_ALIAS ?? (() => { throw new Error("AGENT_ALIAS is not set"); })(),
           AGENT_ID: process.env.AGENT_ID ?? (() => { throw new Error("AGENT_ID is not set"); })(),
           CITATION_BUCKET: process.env.CITATION_BUCKET ?? (() => { throw new Error("CITATION_BUCKET is not set"); })(),
-          DYNAMO_ID: process.env.DYNAMO_ID ?? (() => { throw new Error("DYNAMO_ID is not set"); })(),
-          DYNAMO_KEY: process.env.DYNAMO_KEY ?? (() => { throw new Error("DYNAMO_KEY is not set"); })(),
         },
       }
     );
