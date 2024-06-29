@@ -5,11 +5,8 @@ import boto3
 import json
 import os
 
-BEDROCK_ID = os.getenv("BEDROCK_ID")
-BEDROCK_KEY = os.getenv("BEDROCK_KEY")
-S3_ID = os.getenv("S3_ID")
-S3_KEY = os.getenv("S3_KEY")
-KNOWLEDGE = os.getenv("KNOWLEDGE_BASE_ID")
+AWS_ID = os.getenv("AWS_ID")
+AWS_KEY = os.getenv("AWS_KEY")
 MAX_TOKEN = os.getenv("MAX_TOKEN", 256)
 AGENT_ALIAS = os.getenv("AGENT_ALIAS")
 AGENT_ID = os.getenv("AGENT_ID")
@@ -40,8 +37,8 @@ def LLMTitanLite(input):
     bedrock = boto3.client(
         service_name='bedrock-runtime', 
         region_name='us-east-1',
-        aws_access_key_id=os.getenv("BEDROCK_ID"),
-        aws_secret_access_key=os.getenv("BEDROCK_KEY")
+        aws_access_key_id=AWS_ID,
+        aws_secret_access_key=AWS_KEY
         
     )
 
@@ -68,8 +65,8 @@ def LLMTitanPremier(input, userID):
     bedrock = boto3.client(
         service_name='bedrock-agent-runtime', 
         region_name='us-east-1',
-        aws_access_key_id=BEDROCK_ID,
-        aws_secret_access_key=BEDROCK_KEY
+        aws_access_key_id=AWS_ID,
+        aws_secret_access_key=AWS_KEY
             
     )   
     bedrockObj = bedrock.invoke_agent (
@@ -96,7 +93,7 @@ def LLMTitanPremier(input, userID):
 
                     print(metadata)
 
-                    s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
+                    s3 = boto3.client('s3', aws_access_key_id=AWS_ID, aws_secret_access_key=AWS_KEY)
                     obj = s3.get_object(Bucket=CITATION_BUCKET, Key=metadata)
                     data = json.loads(obj['Body'].read().decode('utf-8'))
 
@@ -115,13 +112,6 @@ def extract_filename(s3_uri):
         return None
 
 # Augmented Prompts
-
-def cost(message):
-    prompt_template = '''\n
-    Does the statement above ask about cost? Choose from the following:
-    yes, no
-    '''
-    return message + prompt_template
 
 def UMLNowAugment(message):
 

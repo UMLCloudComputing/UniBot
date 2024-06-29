@@ -4,8 +4,8 @@ import os
 
 # load_dotenv()
 
-DYNAMO_ID = os.getenv('DYNAMO_ID')
-DYNAMO_KEY = os.getenv('DYNAMO_KEY')
+DYNAMO_ID = os.getenv('AWS_ID')
+DYNAMO_KEY = os.getenv('AWS_KEY')
 DYNAMO_TABLE = "RowdyTable"
 
 def get_item(id):
