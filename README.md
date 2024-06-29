@@ -89,7 +89,7 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 
 ## 🚀 Setting up.
 <details>
-<summary>Dependencies</summary>
+<summary>Installing Dependencies</summary>
 
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Node.JS](https://github.com/nvm-sh/nvm)
@@ -101,13 +101,27 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 </details>
 
 <details>
-<summary>Setup</summary>
-   
-1. Install the tools listed in the Dependencies section of the README.md
-2. Clone the repository.
-3. Create an IAM user that can access AWS Lambda and Cloudformation. Create an access key that you'll use in the next step. You can also put the same exact credentials for `BEDROCK_ID` and `BEDROCK_KEY` in the `.env` file
-4. Run `aws configure` to setup your AWS credentials.
-5. Go to discord.dev and create a new application.
+<summary>Requesting Access to LLM Models</summary>
+
+1. Head to your main AWS Dashboard and search for Amazon Bedrock. Click on Amazon Bedrock
+
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/26fdea83-2d4e-4a06-a4d1-e15071ec6b8e)
+
+2. Click on Get Started
+
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/db7aa135-d3ea-494c-8048-c6e75f7c64ae)
+
+Click on the Titan Models category and request access to Titan Text G1 - Premiere, Titan Text G1 - Lite, and Titan Text Embeddings v2
+**If you're using the Cloud Computing Club account, then the necessary models have already been requested.**
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/a6b0b9c3-f5f2-402d-a41e-418e54f9aafb)
+
+</details>
+
+<details>
+<summary>Setting up a new Discord Application</summary>
+
+1. Go to discord.dev and create a new application.
+2. Follow the documentation here to create a knowledge base that is connected to Pinecone https://docs.pinecone.io/integrations/amazon-bedrock
 
 Navigate to application creation
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/faa98e19-935e-4d27-a37d-afccdbb9cc77)
@@ -126,59 +140,43 @@ Secret Key:
 Public Key:
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
 
-
-7. Save them in a `.env` file like the one below:
-(Note: You can use the same IAM user for Bedrock, CDK, and S3 if you wish.)
-
-Example of `.env` file.
-```
-DISCORD_PUBLIC_KEY = <public key of discord bot>
-TOKEN=<secret token of bot>
-ID=<ID of bot>
-LAMBDA_FUNC=<name of your lambda function (can be anything)>
-BEDROCK_ID=<bedrock IAM user ID>
-BEDROCK_KEY=<bedrock IAM user key>
-S3_ID=<S3 IAM user ID>
-S3_Key=<S3 IAM user key>
-CITATION_BUCKET=<Bucket where you keep filename.extension.json files that cite the URL sources of the corresponding filenames in the Knowledge Base S3 bucket>
-AGENT_ID=<Amazon Bedrock Agent ID>
-AGENT_ALIAS=<Amazon Bedrock Agent Alias>
-```
-8. Finally, run `cdk bootstrap` to setup the cdk project.
-
+7. Save them to a safe place. You will be needing these in the next step.
 </details>
 
-## 🪨 Setting up Amazon Bedrock
-
 <details>
-<summary>Setup</summary>
+<summary>Development Setup</summary>
+   
+1. Install the tools listed in the Dependencies section of the README.md
+2. Clone the repository to a your local device.
+3. Create an IAM user and give them full access to Amazon Bedrock, DynamoDB, S3, and AWS Lambda.
+4. Run `aws configure` to setup your AWS credentials.
+5. Create a .env in the root of the repository. Enter your AWS credentials as such:
+```
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+```
+1. Create a DyanmoDB table and note down the name. You will need this in the following steps
+2. Create an Amazon Bedrock Knowledge Base with these instructions https://docs.pinecone.io/integrations/amazon-bedrock. You may optionally create another S3 bucket to hold the citations for the files that get ingested into the LLM. You can do so by creating a file with the same filename as the file you'd like to cite with `.json` appended to the end of it. Add the key "url" in the json file and specify the source URL of the file. Make sure to note down the name of your Citation Bucket if you choose to make one.
+3. Create an Amazon Bedrock Agent and attach a the knowledge base your created. Follow these instructions for the creation of an Agent https://docs.aws.amazon.com/bedrock/latest/userguide/agents-create.html
+4. Create an alias for the Amazon Bedrock Agent https://docs.aws.amazon.com/bedrock/latest/userguide/agents-deploy.html. Note down both the ID of the Agent and the ID of the Alias. 
+5. Save the following values that you noted down into your `.env` file .
+```
+TOKEN=<Discord Bot Secret Key>
+ID=<Discord Bot ID>
+DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 
-1. Head to your main AWS Dashboard and search for Amazon Bedrock. Click on Amazon Bedrock
+# AWS Credentials
+AWS_ACCESS_KEY_ID=<AWS Access Key ID>
+AWS_SECRET_ACCESS_KEY=<AWS Access Secret Key>
 
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/26fdea83-2d4e-4a06-a4d1-e15071ec6b8e)
-
-Click on Get Started
-
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/db7aa135-d3ea-494c-8048-c6e75f7c64ae)
-
-Click on the Titan Models category and request access to Titan Text G1 - Premiere, Titan Text G1 - Lite, and Titan Text Embeddings v2
-**If you're using the Cloud Computing Club account, then the necessary models have already been requested.**
-
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/a6b0b9c3-f5f2-402d-a41e-418e54f9aafb)
-
-Now click on AWS Bedrock Knowledge Bases and create a Knowledge Base. You can use the Knowledge Base ID provided in "Setup" if you don't want to create one.
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/036664e0-ad62-43da-b5df-b9c19b92de36)
-
-Click on Next
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/997b5a96-7534-4494-ad23-dde9fa7fe428)
-
-Browse for an S3 Location, where you stored the files you would like to ingest into the Knowledge Base
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/d61869c9-9811-4cc8-92c7-949a68e0c92d)
-
-Select the Embeddings Model that is circled and select 1024 dimensions
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/311e4865-3f51-4679-8c44-0f4f6c54fcd2)
-
-Scroll down a bit and click Pinecone. Follow the Guide here to setup the rest of your knowledgebase https://docs.pinecone.io/integrations/amazon-bedrock
+# Resource IDs
+LAMBDA_FUNC=<Lambda Function Name (name this whatever you want)>
+DYNAMO_TABLE=<Name of your DynamoDB Table>
+CITATION_BUCKET=<Name of your Citations Database (optional)>
+AGENT_ID=<ID of the Amazon Bedrock Agent>
+AGENT_ALIAS=<ID of the Amazon Bedrock Agent Alias>
+```
+8. Finally, run `cdk bootstrap` to setup the cdk project.
 
 </details>
 
