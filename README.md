@@ -143,9 +143,6 @@ Public Key:
 7. Save them to a safe place. You will be needing these in the next step.
 </details>
 
-
-<details>
-
 <details>
 <summary>Development Setup</summary>
    
@@ -158,11 +155,11 @@ Public Key:
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
-6. Create a DyanmoDB table and note down the name. You will need this in the following steps
-7. Create an Amazon Bedrock Knowledge Base with these instructions https://docs.pinecone.io/integrations/amazon-bedrock
-8. Create an Amazon Bedrock Agent and attach a the knowledge base your created.
-9. Create an alias for the Amazon Bedrock Agent. Note down both the ID of the Agent and the ID of the Alias.
-10. Make sure that these values are set in your `.env` file .
+1. Create a DyanmoDB table and note down the name. You will need this in the following steps
+2. Create an Amazon Bedrock Knowledge Base with these instructions https://docs.pinecone.io/integrations/amazon-bedrock
+3. Create an Amazon Bedrock Agent and attach a the knowledge base your created.
+4. Create an alias for the Amazon Bedrock Agent. Note down both the ID of the Agent and the ID of the Alias.
+5.  Make sure that these values are set in your `.env` file .
 ```
 TOKEN=<Discord Bot Secret Key>
 ID=<Discord Bot ID>
