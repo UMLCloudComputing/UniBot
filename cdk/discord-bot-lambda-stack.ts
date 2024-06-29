@@ -26,6 +26,7 @@ export class DiscordBotLambdaStack extends cdk.Stack {
           AGENT_ALIAS: process.env.AGENT_ALIAS ?? (() => { throw new Error("AGENT_ALIAS is not set"); })(),
           AGENT_ID: process.env.AGENT_ID ?? (() => { throw new Error("AGENT_ID is not set"); })(),
           CITATION_BUCKET: process.env.CITATION_BUCKET ?? (() => { throw new Error("CITATION_BUCKET is not set"); })(),
+          DYNAMO_TABLE: process.env.DYNAMO_TABLE ?? (() => { throw new Error("DYNAMO_TABLE is not set"); })(),
         },
       }
     );
