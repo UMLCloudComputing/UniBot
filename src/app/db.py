@@ -6,7 +6,7 @@ import os
 
 DYNAMO_ID = os.getenv('AWS_ID')
 DYNAMO_KEY = os.getenv('AWS_KEY')
-DYNAMO_TABLE = "RowdyTable"
+DYNAMO_TABLE = os.getenv('DYNAMO_TABLE')
 
 def get_item(id):
     dynamodb = boto3.resource(
