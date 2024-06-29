@@ -156,7 +156,7 @@ AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
 1. Create a DyanmoDB table and note down the name. You will need this in the following steps
-2. Create an Amazon Bedrock Knowledge Base with these instructions https://docs.pinecone.io/integrations/amazon-bedrock
+2. Create an Amazon Bedrock Knowledge Base with these instructions https://docs.pinecone.io/integrations/amazon-bedrock. You may optionally create another S3 bucket to hold the citations for the files that get ingested into the LLM. You can do so by creating a file with the same filename as the file you'd like to cite with `.json` appended to the end of it. Add the key "url" in the json file and specify the source URL of the file. Make sure to note down the name of your Citation Bucket if you choose to make one.
 3. Create an Amazon Bedrock Agent and attach a the knowledge base your created.
 4. Create an alias for the Amazon Bedrock Agent. Note down both the ID of the Agent and the ID of the Alias.
 5.  Make sure that these values are set in your `.env` file .
