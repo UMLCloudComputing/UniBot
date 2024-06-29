@@ -1,3 +1,5 @@
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/7de8019c-f964-4835-a2c2-6975b4cdeea0)
+
 <div align="center">
 
 [![Contributors](https://img.shields.io/github/contributors/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/graphs/contributors)
@@ -6,8 +8,6 @@
 [![Issues](https://img.shields.io/github/issues/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/issues)
 [![MIT License](https://img.shields.io/github/license/UMLCloudComputing/rowdybot.svg?style=for-the-badge)](https://github.com/UMLCloudComputing/rowdybot/blob/master/LICENSE)
 </div>
-
-
 
 ## 📘 About
 A Discord Bot to answers all your questions about UML! Has LLM integration to respond to a wide variety of questions.
