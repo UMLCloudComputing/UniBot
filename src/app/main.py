@@ -65,6 +65,12 @@ def interact(raw_request):
   
         match command_name:
             
+            # Reset user Query Limits
+            case "reset":
+                send("Resetting Query Limits", id, token)
+                db.reset_table()
+                message_content = ":green_circle: Query Limits reset successfully!"
+                update(message_content, token)
             # Command /hello
             case "hello":
                 # message_content is the response to the user
