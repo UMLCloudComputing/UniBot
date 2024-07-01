@@ -69,11 +69,11 @@ def interact(raw_request):
             date_string = db.get_item("date")
             current_date = datetime.strptime(date_string, "%Y-%m-%d")
 
-            if current_date.month > datetime.now().month:
+            if current_date.month < datetime.now().month:
                 db.reset_table()
-            if current_date.year > datetime.now().year:
+            if current_date.year < datetime.now().year:
                 db.reset_table()
-            if current_date.day > datetime.now().day:
+            if current_date.day < datetime.now().day:
                 db.reset_table()
                 
             db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
