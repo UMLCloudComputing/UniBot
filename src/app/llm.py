@@ -25,7 +25,16 @@ def invoke_llm(input, userID):
         outputText = LLMTitanLite(UMLNowAugment(input))
 
         match outputText:
-            case "prerequisites": return course.course_info("prereq", list[0])
+            case "prerequisites": 
+                result = course.course_info("prereq", list[0])
+                parts = result.split("Co-req:")
+                pre = parts[0].strip()
+                co = parts[1].strip() if len(parts) > 1 else ""
+
+                if co == "":
+                    return f"The prerequisites of the course are {pre}"
+                
+                return f"The prerequisites of the course are {pre} the co-requisites are {co}"
             case "name": return course.course_info("name", list[0])
             case "credits": return course.course_info("credits", list[0])
 
