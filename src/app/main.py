@@ -4,6 +4,7 @@ import llm
 import course
 import json
 import db
+from datetime import datetime
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
@@ -62,9 +63,29 @@ def interact(raw_request):
         # The command being execute
         command_name = data["name"]
 
-  
+        if db.get_item("date") == -1:
+            db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
+        else:
+            date_string = db.get_item("date")
+            current_date = datetime.strptime(date_string, "%Y-%m-%d")
+
+            if current_date.month < datetime.now().month:
+                db.reset_table()
+            if current_date.year < datetime.now().year:
+                db.reset_table()
+            if current_date.day < datetime.now().day:
+                db.reset_table()
+                
+            db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
+
         match command_name:
             
+            # Reset user Query Limits
+            case "reset":
+                send("Resetting Query Limits", id, token)
+                db.reset_table()
+                message_content = ":green_circle: Query Limits reset successfully!"
+                update(message_content, token)
             # Command /hello
             case "hello":
                 # message_content is the response to the user

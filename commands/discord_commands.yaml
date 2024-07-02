@@ -42,3 +42,6 @@
 
 - name: dog
   description: Fetches a random dog image.
+
+- name: reset
+  description: Resets the rate limits for every user on the server

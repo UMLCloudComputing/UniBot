@@ -128,16 +128,6 @@ def isCourseAugment(message):
     '''
     return message + prompt_template
 
-def RAGTemplate(message):
-    prompt_template = '''\n
-    You are a chatbot for the University of Massachusetts Lowell. Answer the question as if you a tour guide.
-
-    When the user asks about housing, you should provide information about the residence hall, and its price.
-    
-    If you don't know the answer to a question, you should say "Can you clarify your question?".
-    '''
-    return message + prompt_template
-
 # Regex Matcher
 def course_process(message):
     course_matches = []
