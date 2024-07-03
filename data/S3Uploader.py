@@ -89,9 +89,8 @@ with open('urls.json', 'r') as file:
 if st.button("Load from Database"):
     load_from_database(bucket, source)
 
-if st.button('Add URL directly to S3'):
-    if url:
-        filename = update_bucket(url, bucket, source)
-        st.success(f'Downloaded and saved as {filename} and {filename}.json')
-    else:
-        st.error('Please enter a valid URL.')
+knowledge_base = st.text_input('Enter the knowledge base name')
+knowledge_source = st.text_input('Enter the knowledge base source ID')
+
+if st.button("Start Ingestion Job"):
+    pass
