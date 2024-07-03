@@ -28,7 +28,7 @@ def invoke_llm(input, userID):
             case "prerequisites":
                 result = course.course_info("prereq", list[0])
 
-                prompt = "Please summarize the following information concisely\n"
+                prompt = "Please summarize the following prerequisites concisely\n"
 
                 return LLMTitanLite(prompt + result)
 
