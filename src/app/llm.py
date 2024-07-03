@@ -27,13 +27,19 @@ def invoke_llm(input, userID):
         match outputText:
             case "prerequisites":
                 result = course.course_info("prereq", list[0])
-                parts = result.split("Co-req:")
-                pre = parts[0].strip()
-                co = parts[1].strip() if len(parts) > 1 else ""
 
-                if co == "":
-                    return f"The prerequisites of the course are {pre}"
-                return f"The prerequisites of {list[0]} are {pre} the co-requisites are {co}"
+                prompt = "Please summarize the following information concisely\n"
+
+                return LLMTitanLite(prompt + result)
+
+
+                # parts = result.split("Co-req:")
+                # pre = parts[0].strip()
+                # co = parts[1].strip() if len(parts) > 1 else ""
+
+                # if co == "":
+                #     return f"The prerequisites of the course are {pre}"
+                # return f"The prerequisites of {list[0]} are {pre} the co-requisites are {co}"
 
             case "name": 
                 result = course.course_info("name", list[0])
