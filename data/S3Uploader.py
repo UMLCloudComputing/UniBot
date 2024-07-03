@@ -12,9 +12,15 @@ import os
 # Load environment variables
 load_dotenv()
 
-S3_ID = os.getenv('S3_ID')
-S3_KEY = os.getenv('S3_KEY')
+S3_ID = os.getenv('AWS_ACCESS_KEY_ID')
+S3_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
+def ingest_data(knowledge_base, knowledge_source):
+    client = boto3.client('bedrock-agent', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
+    response = client.start_ingestion_job(
+        dataSourceId=knowledge_source,
+        knowledgeBaseId=knowledge_base
+    )
 
 def load_from_database(dataBucket, metadataBucket):
     with open('urls.json', 'r') as file:
@@ -93,4 +99,4 @@ knowledge_base = st.text_input('Enter the knowledge base name')
 knowledge_source = st.text_input('Enter the knowledge base source ID')
 
 if st.button("Start Ingestion Job"):
-    pass
+    ingest_data(knowledge_base, knowledge_source)
