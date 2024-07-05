@@ -1,6 +1,7 @@
 import requests
 import boto3
 import json
+from bs4 import BeautifulSoup
 from urllib.parse import urlparse
 import streamlit as st
 import streamlit_authenticator as stauth
@@ -26,13 +27,14 @@ def load_from_database(dataBucket, metadataBucket):
     with open('urls.json', 'r') as file:
         urls = json.load(file)
 
-    for list_item in urls['url']:
+    for list_item in urls['urls']:
         update_bucket(list_item, dataBucket, metadataBucket)
     
 
 def download_html_and_create_json(url):
     response = requests.get(url)
-    html_content = response.text
+    soup = BeautifulSoup(response.text, 'html.parser')
+    html_content = soup
 
     parsed_url = urlparse(url)
     filename = re.sub(r'\W+', '_', parsed_url.netloc + parsed_url.path) + ".html"
@@ -40,7 +42,7 @@ def download_html_and_create_json(url):
     with open(filename, 'w') as file:
         file.write(html_content)
 
-    url_data = {"url": url}
+    url_data = {"urls": url}
 
     with open(filename + '.json', 'w') as json_file:
         json.dump(url_data, json_file)
