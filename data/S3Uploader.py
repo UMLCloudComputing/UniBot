@@ -26,7 +26,7 @@ def load_from_database(dataBucket, metadataBucket):
     with open('urls.json', 'r') as file:
         urls = json.load(file)
 
-    for list_item in urls['url']:
+    for list_item in urls['urls']:
         update_bucket(list_item, dataBucket, metadataBucket)
     
 
