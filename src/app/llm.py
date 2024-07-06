@@ -5,6 +5,10 @@ import boto3
 import json
 import os
 
+if __name__ == "__main__":
+    from dotenv import *
+    load_dotenv()
+
 AWS_ID = os.getenv("AWS_ID")
 AWS_KEY = os.getenv("AWS_KEY")
 MAX_TOKEN = os.getenv("MAX_TOKEN", 256)

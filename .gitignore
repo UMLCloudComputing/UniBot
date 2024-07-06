@@ -4,6 +4,7 @@
 node_modules
 *.env
 tools/
+__pycache__
 # CDK asset staging directory
 .cdk.staging
 cdk.out
