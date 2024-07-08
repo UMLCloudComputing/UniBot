@@ -1,9 +1,6 @@
 - name: hello
   description: Say hello!
 
-- name: ping
-  description: Check if the bot is alive.
-
 - name: chat
   description: Chat with the bot or ask questions!
   options:
@@ -27,3 +24,24 @@
       description: The message to echo back.
       type: 3 # string
       required: true
+
+- name: pizza
+  description: Prints out pizza 🍕
+  
+- name: course
+  description: Get information about an UML course
+  options:
+    - name: course
+      description: Name of the course
+      type: 3
+      required: true
+    - name: info
+      description: Type of information (name, credits, prereq)
+      type: 3
+      required: true
+
+- name: dog
+  description: Fetches a random dog image.
+
+- name: reset
+  description: Resets the rate limits for every user on the server

@@ -37,6 +37,12 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+        LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
+        ID: ${{secrets.ID}}
+        AGENT_ID: ${{secrets.AGENT_ID}}
+        AGENT_ALIAS: ${{secrets.AGENT_ALIAS}}
+        CITATION_BUCKET: ${{secrets.CITATION_BUCKET}}
+        DYNAMO_TABLE: ${{secrets.DYNAMO_TABLE}}
 
     - name: Deploy
       run: cdk deploy --all --require-approval never
@@ -45,3 +51,10 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+        LAMBDA_FUNC: ${{secrets.LAMBDA_FUNC}}
+        ID: ${{secrets.ID}}
+        AGENT_ID: ${{secrets.AGENT_ID}}
+        AGENT_ALIAS: ${{secrets.AGENT_ALIAS}}
+        CITATION_BUCKET: ${{secrets.CITATION_BUCKET}}
+        DYNAMO_TABLE: ${{secrets.DYNAMO_TABLE}}
+

@@ -1,5 +1,7 @@
-flask
-mangum
-asgiref
-discord-interactions
 requests
+bs4
+fire
+boto3
+playwright
+pynacl
+git+https://github.com/MartinMarwad/UML-NOW-CLI
