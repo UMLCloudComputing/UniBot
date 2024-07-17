@@ -16,6 +16,8 @@ load_dotenv()
 S3_ID = os.getenv('AWS_ACCESS_KEY_ID')
 S3_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
+S3_BUCKET = os.getenv('S3_BUCKET')
+
 def ingest_data(knowledge_base, knowledge_source):
     client = boto3.client('bedrock-agent', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
     response = client.start_ingestion_job(
@@ -23,33 +25,17 @@ def ingest_data(knowledge_base, knowledge_source):
         knowledgeBaseId=knowledge_base
     )
 
-def load_from_database(dataBucket, metadataBucket):
+def load_from_database():
     with open('urls.json', 'r') as file:
         urls = json.load(file)
 
     for list_item in urls['urls']:
-        update_bucket(list_item, dataBucket, metadataBucket)
-    
+        update_bucket(list_item)
 
-# def download_html_and_create_json(url):
-#     response = requests.get(url)
-#     soup = BeautifulSoup(response.text, 'html.parser')
-#     html_content = soup
+def update_bucket(url):
 
-#     parsed_url = urlparse(url)
-#     filename = re.sub(r'\W+', '_', parsed_url.netloc + parsed_url.path) + ".html"
+    bucket_name = S3_BUCKET
 
-#     with open(filename, 'w') as file:
-#         file.write(html_content)
-
-#     url_data = {"urls": url}
-
-#     with open(filename + '.json', 'w') as json_file:
-#         json.dump(url_data, json_file)
-    
-#     return filename
-
-def update_bucket(url, bucket_name):
     s3 = boto3.client('s3', aws_access_key_id=S3_ID, aws_secret_access_key=S3_KEY)
     
     print("Succesfully created S3 Bucket")
@@ -69,45 +55,48 @@ def update_bucket(url, bucket_name):
 
     return filename
 
-st.title('S3 Tools')
 
-url = st.text_input('Enter the URL')
-bucket = st.text_input('Enter the bucket name')
-source = st.text_input('Enter the metadata bucket name')
+def streamlit():
+    st.title('S3 Tools')
 
-if st.button("Add URL directly to S3 Bucket"):
-    update_bucket(url, bucket)
+    url = st.text_input('Enter the URL')
 
-if st.button("Add URL to database"):
+    if st.button("Add URL directly to S3 Bucket"):
+        update_bucket(url)
+
+    if st.button("Add URL to database"):
+        with open('urls.json', 'r') as file:
+            data = json.load(file)
+            data['urls'].append(url)
+        
+        with open('urls.json', 'w') as file:
+            json.dump(data, file)
+        
+        st.success('URL added to database.')
+
+
+
     with open('urls.json', 'r') as file:
         data = json.load(file)
-        data['urls'].append(url)
-    
-    with open('urls.json', 'w') as file:
-        json.dump(data, file)
-    
-    st.success('URL added to database.')
+        
+        urls = data['urls']
+
+        with st.sidebar:
+            st.write("### URLs from JSON file:")
+            for index, url in enumerate(urls, start=1):
+                st.write(f"{index}. {url}")
+
+    if st.button("Load from Database"):
+        load_from_database()
 
 
+    st.title("Knowledge Base Ingestion")
 
-with open('urls.json', 'r') as file:
-    data = json.load(file)
-    
-    urls = data['urls']
+    knowledge_base = st.text_input('Enter the knowledge base name')
+    knowledge_source = st.text_input('Enter the knowledge base source ID')
 
-    with st.sidebar:
-        st.write("### URLs from JSON file:")
-        for index, url in enumerate(urls, start=1):
-            st.write(f"{index}. {url}")
+    if st.button("Start Ingestion Job"):
+        ingest_data(knowledge_base, knowledge_source)
 
-if st.button("Load from Database"):
-    load_from_database(bucket, source)
-
-
-st.title("Knowledge Base Ingestion")
-
-knowledge_base = st.text_input('Enter the knowledge base name')
-knowledge_source = st.text_input('Enter the knowledge base source ID')
-
-if st.button("Start Ingestion Job"):
-    ingest_data(knowledge_base, knowledge_source)
+if __name__ == '__main__':
+    streamlit()
