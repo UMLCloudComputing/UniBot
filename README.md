@@ -172,7 +172,7 @@ AWS_SECRET_ACCESS_KEY=<AWS Access Secret Key>
 # Resource IDs
 LAMBDA_FUNC=<Lambda Function Name (name this whatever you want)>
 DYNAMO_TABLE=<Name of your DynamoDB Table>
-CITATION_BUCKET=<Name of your Citations Database (optional)>
+S3_BUCKET=<S3 Bucket where your data is stored>
 AGENT_ID=<ID of the Amazon Bedrock Agent>
 AGENT_ALIAS=<ID of the Amazon Bedrock Agent Alias>
 ```
