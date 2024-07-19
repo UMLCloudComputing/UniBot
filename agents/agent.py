@@ -101,7 +101,17 @@ def create_agent_role(model_id, policy_name):
         print(f"Couldn't create role {role_name}. Here's why: {e}")
         raise
 
-    returnStr = f"arn:aws:iam::423612855438:role/{role_name}"
+    sts_client = boto3.client(
+        service_name='sts', 
+        region_name='us-east-1',
+        aws_access_key_id=AWS_ID,
+        aws_secret_access_key=AWS_KEY
+    )
+    
+    caller_identity = sts_client.get_caller_identity()
+    account_id = caller_identity['Account']
+
+    returnStr = f"arn:aws:iam::{account_id}:role/{role_name}"
     return returnStr
 
 # Create Amazon Bedrock Agent
@@ -208,4 +218,4 @@ def delete_agent():
 
 
 if __name__ == "__main__":
-    prepare_agent("RPDSH3CSVL")
+    prepare_agent("IIBDMUUA7Q")
