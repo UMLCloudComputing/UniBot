@@ -13,8 +13,7 @@ AWS_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
 # Prompts
-prompt = '''
-System: A chat between a curious User and an artificial intelligence Bot. The Bot gives helpful, detailed, and polite answers to the User's questions. In this session, the model has access to external functionalities.
+prompt = '''System: A chat between a curious User and an artificial intelligence Bot. The Bot gives helpful, detailed, and polite answers to the User's questions. In this session, the model has access to external functionalities.
 To assist the user, you can reply to the user or invoke an action. Only invoke actions if relevant to the user request.
 $instruction$
 
@@ -26,8 +25,7 @@ User: $question$
 $thought$ $bot_response$
 '''
 
-kbgeneration = '''
-A chat between a curious User and an artificial intelligence Bot. The Bot gives helpful, detailed, and polite answers to the User's questions.
+kbgeneration = '''A chat between a curious User and an artificial intelligence Bot. The Bot gives helpful, detailed, and polite answers to the User's questions.
 
 In this session, the model has access to search results and a user's question, your job is to answer the user's question using only information from the search results.
 
@@ -42,9 +40,7 @@ User: $query$ Bot:
 Resources: Search Results: $search_results$ Bot:
 '''
 
-instruction = '''
-Your name is Rowdy the Riverhawk and your job is to answer questions about the University of Massachusetts Lowell.
-'''
+instruction = '''Your name is Rowdy the Riverhawk and your job is to answer questions about the University of Massachusetts Lowell.'''
 
 def generate_random_string(length):
     letters = string.ascii_letters + string.digits
@@ -198,6 +194,56 @@ def prepare_agent(agent_id):
         agentId=agent_id
     )
 
+def update_agent(agent_id, agent_name):
+    bedrock = boto3.client(
+        service_name='bedrock-agent', 
+        region_name='us-east-1',
+        aws_access_key_id=AWS_ID,
+        aws_secret_access_key=AWS_KEY
+    )
+
+    response = bedrock.update_agent(
+        agentId=agent_id,
+        agentName=agent_name,
+        agentResourceRoleArn=create_agent_role('amazon.titan-text-premier-v1:0', 'AmazonBedrockExecutionRoleForAgents'),
+        description='Testing',
+        foundationModel='amazon.titan-text-premier-v1:0',
+        idleSessionTTLInSeconds=123,
+        instruction=instruction,
+        promptOverrideConfiguration={
+            'promptConfigurations': [
+                {
+                    'basePromptTemplate': prompt,
+                    'inferenceConfiguration': {
+                        'maximumLength': 256,
+                        'temperature': 0, 
+                        'topK': 123,
+                        'topP': 0.1
+                    },
+                    'parserMode': 'DEFAULT',
+                    'promptCreationMode': 'OVERRIDDEN',
+                    'promptState': 'ENABLED',
+                    'promptType': 'ORCHESTRATION'
+                },
+
+                {
+                    'basePromptTemplate': prompt,
+                    'inferenceConfiguration': {
+                        'maximumLength': 256,
+                        'temperature': 0,
+                        'topK': 123,
+                        'topP': 0.1
+                    },
+                    'parserMode': 'DEFAULT',
+                    'promptCreationMode': 'OVERRIDDEN',
+                    'promptState': 'ENABLED',
+                    'promptType': 'KNOWLEDGE_BASE_RESPONSE_GENERATION'
+                }
+            ]
+        },
+    )
+
+
 def delete_agent():
     list_agents()
 
@@ -218,4 +264,4 @@ def delete_agent():
 
 
 if __name__ == "__main__":
-    prepare_agent("IIBDMUUA7Q")
+    update_agent("IIBDMUUA7Q")
