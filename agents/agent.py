@@ -40,7 +40,9 @@ User: $query$ Bot:
 Resources: Search Results: $search_results$ Bot:
 '''
 
-instruction = '''Your name is Rowdy the Riverhawk and your job is to answer questions about the University of Massachusetts Lowell.'''
+with open('instructions.txt', 'r') as file:
+    # Step 2: Read the contents
+    instruction = file.read()
 
 def generate_random_string(length):
     letters = string.ascii_letters + string.digits
