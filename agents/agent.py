@@ -50,8 +50,8 @@ def generate_random_string(length):
     letters = string.ascii_letters + string.digits
     return ''.join(random.choice(letters) for _ in range(length))
 
-random_string = generate_random_string(10)
-print(random_string)
+# random_string = generate_random_string(10)
+# print(random_string)
 
 def create_agent_role(model_id, policy_name):
     role_name = f"AmazonBedrockExecutionRoleForAgents_{generate_random_string(10)}"
@@ -166,7 +166,7 @@ def create_agent(agent_name):
         }
     )
 
-    prepare_agent(response['agent']['agentId'])
+    # prepare_agent(response['agent']['agentId'])
 
     return f'''Please add this to your .env file\nAGENT_ID = {response['agent']['agentId']}\n
 Go to this link https://us-east-1.console.aws.amazon.com/bedrock/home?region=us-east-1#/agents/{response['agent']['agentId']}/
