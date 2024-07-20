@@ -6,6 +6,7 @@ from botocore.exceptions import ClientError
 from logging import *
 import random
 import string
+import time
 
 load_dotenv()
 
@@ -90,6 +91,11 @@ def create_agent_role(model_id, policy_name):
                             "Effect": "Allow",
                             "Action": "bedrock:InvokeModel",
                             "Resource": model_arn,
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": "bedrock:ListAgentAliases",
+                            "Resource": "*"
                         }
                     ],
                 }
@@ -164,11 +170,11 @@ def create_agent(agent_name):
         }
     )
 
-    # prepare_agent(response['agent']['agentId'])
+    time.sleep(5)
+    prepare_agent(response['agent']['agentId'])
 
     return f'''Please add this to your .env file\nAGENT_ID = {response['agent']['agentId']}\n
-Go to this link https://us-east-1.console.aws.amazon.com/bedrock/home?region=us-east-1#/agents/{response['agent']['agentId']}/
-Click \"Edit in Agent Builder\". Then click "Save". Then click "Prepare". You have successfully created an Amazon Bedrock Agent '''
+Go to this link https://us-east-1.console.aws.amazon.com/bedrock/home?region=us-east-1#/agents/{response['agent']['agentId']}/ '''
 
 def list_agents():
     client = boto3.client(
@@ -263,7 +269,24 @@ def delete_agent():
         skipResourceInUseCheck=True
     )
 
+def list_agent_aliases(agentId):
+    bedrock = boto3.client(
+        service_name='bedrock-agent', 
+        region_name='us-east-1',
+        aws_access_key_id=AWS_ID,
+        aws_secret_access_key=AWS_KEY
+    )
 
+    response = bedrock.list_agent_aliases(
+        agentId=agentId,
+        maxResults=123
+    )
+
+    for summary in response['agentAliasSummaries']:
+        print(f"Alias Name: {summary['agentAliasName']}, Alias ID: {summary['agentAliasId']}")
+
+def create_alias(agentId):
+    pass
 
 if __name__ == "__main__":
-    update_agent("IIBDMUUA7Q")
+    list_agent_aliases("RNFMM5CPB5")
