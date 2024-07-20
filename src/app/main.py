@@ -4,12 +4,17 @@ import llm
 import course
 import json
 import db
+import agent
+import time
 from datetime import datetime
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 MAX_QUERIES = 10
+
+agent.update_alias()
+time.sleep(2)
 
 def verify(event):
     signature = event['headers']['x-signature-ed25519']
