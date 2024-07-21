@@ -13,9 +13,6 @@ from nacl.exceptions import BadSignatureError
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
 MAX_QUERIES = 10
 
-agent.update_alias()
-time.sleep(2)
-
 def verify(event):
     signature = event['headers']['x-signature-ed25519']
     timestamp = event['headers']['x-signature-timestamp']
