@@ -88,8 +88,8 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 </details>
 
 ## 🚀 Setting up.
-<details>
-<summary>Installing Dependencies</summary>
+
+### Dependencies
 
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Node.JS](https://github.com/nvm-sh/nvm)
@@ -98,10 +98,8 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 - Pyyaml `pip install pyyaml`
 - Requests `pip install requests`
 
-</details>
 
-<details>
-<summary>Requesting Access to LLM Models</summary>
+### Request Access to LLM Models
 
 1. Head to your main AWS Dashboard and search for Amazon Bedrock. Click on Amazon Bedrock
 
@@ -115,10 +113,8 @@ Click on the Titan Models category and request access to Titan Text G1 - Premier
 **If you're using the Cloud Computing Club account, then the necessary models have already been requested.**
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/a6b0b9c3-f5f2-402d-a41e-418e54f9aafb)
 
-</details>
 
-<details>
-<summary>Setting up a new Discord Application</summary>
+### Discord Application Setup
 
 1. Go to discord.dev and create a new application.
 2. Follow the documentation here to create a knowledge base that is connected to Pinecone https://docs.pinecone.io/integrations/amazon-bedrock
@@ -140,11 +136,15 @@ Secret Key:
 Public Key:
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
 
-7. Save them to a safe place. You will be needing these in the next step.
-</details>
+7. Save them to a `.env` file. You will be needing these in the next step.
+```
+# Discord
+TOKEN=<Discord Bot Secret Key>
+ID=<Discord Bot ID>
+DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
+```
 
-<details>
-<summary>Development Setup</summary>
+### Local Development Setup
    
 1. Install the tools listed in the Dependencies section of the README.md
 2. Clone the repository to a your local device.
@@ -156,29 +156,42 @@ AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
 1. Create a DyanmoDB table and note down the name. You will need this in the following steps
-2. Create an Amazon Bedrock Knowledge Base with these instructions https://docs.pinecone.io/integrations/amazon-bedrock. You may optionally create another S3 bucket to hold the citations for the files that get ingested into the LLM. You can do so by creating a file with the same filename as the file you'd like to cite with `.json` appended to the end of it. Add the key "url" in the json file and specify the source URL of the file. Make sure to note down the name of your Citation Bucket if you choose to make one.
-3. Create an Amazon Bedrock Agent and attach a the knowledge base your created. Follow these instructions for the creation of an Agent https://docs.aws.amazon.com/bedrock/latest/userguide/agents-create.html
-4. Create an alias for the Amazon Bedrock Agent https://docs.aws.amazon.com/bedrock/latest/userguide/agents-deploy.html. Note down both the ID of the Agent and the ID of the Alias. 
-5. Save the following values that you noted down into your `.env` file .
+2. Create a Pinecone Account, and create a new index. Note down the URL of the Index in `PINECONE_URL`.
+3. Create a new API key in Pinecone. Create a new Secret in AWS Secrets Manager and choose "Other type of secret". Set the key as "apiKey" and the value as your pinecone API key. 
+4. Store the ARN of the secret in `PINECONE_API_KEY`. In the future, this will be done automatically.
+5. Make sure these environmental variables are in your `.env` file.
 ```
-TOKEN=<Discord Bot Secret Key>
-ID=<Discord Bot ID>
-DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
-
 # AWS Credentials
 AWS_ACCESS_KEY_ID=<AWS Access Key ID>
 AWS_SECRET_ACCESS_KEY=<AWS Access Secret Key>
+APP_NAME=<The Name of Your Application. Can be anything you want.>
+DYNAMO_TABLE=
 
-# Resource IDs
-LAMBDA_FUNC=<Lambda Function Name (name this whatever you want)>
-DYNAMO_TABLE=<Name of your DynamoDB Table>
-S3_BUCKET=<S3 Bucket where your data is stored>
-AGENT_ID=<ID of the Amazon Bedrock Agent>
-AGENT_ALIAS=<ID of the Amazon Bedrock Agent Alias>
+# Pinecone
+PINECONE_URL = 
+PINECONE_API_KEY =
+
+# Discord
+TOKEN=<Discord Bot Secret Key>
+ID=<Discord Bot ID>
+DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 ```
 8. Finally, run `cdk bootstrap` to setup the cdk project.
 
 </details>
+
+
+## 📦 Deploying
+
+<details>
+<summary>Deployments</summary>
+
+1. Run `cdk bootstrap` to setup the project for deployment.
+2. Deploy to lambda by running `cdk deploy`.
+3. If `cdk deploy` fails due to insufficient privileges to run docker, type `sudo cdk deploy`. If that doesn't work, type `sudo -i` to become root, `cd` back to the project root and run `cdk deploy` again.
+4. If successful, `cdk deploy` should have this: `DiscordBotLambdaTest.ApiGatewayUrl = <Your API Gateway URL>` in the output.
+5. Copy the API Gateway URL and go to your Discord Developer's Portal (discord.dev). Set this as Interactions Endpoint for your Bot.
+![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/6e0171af-3151-4223-9590-b7d9953aca39)
 
 ## 👉 Commands
 
@@ -218,17 +231,6 @@ AGENT_ALIAS=<ID of the Amazon Bedrock Agent Alias>
   
 </details>
 
-## 📦 Deploying
-
-<details>
-<summary>Deployments</summary>
-
-1. Run `cdk bootstrap` to setup the project for deployment.
-2. Deploy to lambda by running `cdk deploy`.
-3. If `cdk deploy` fails due to insufficient privileges to run docker, type `sudo cdk deploy`. If that doesn't work, type `sudo -i` to become root, `cd` back to the project root and run `cdk deploy` again.
-4. If successful, `cdk deploy` should have this: `DiscordBotLambdaTest.ApiGatewayUrl = <Your API Gateway URL>` in the output.
-5. Copy the API Gateway URL and go to your Discord Developer's Portal (discord.dev). Set this as Interactions Endpoint for your Bot.
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/6e0171af-3151-4223-9590-b7d9953aca39)
 
 
 </details>
