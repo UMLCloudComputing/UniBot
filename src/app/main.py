@@ -10,7 +10,7 @@ from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
 DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
-MAX_QUERIES = 10
+MAX_QUERIES = 20
 
 def verify(event):
     signature = event['headers']['x-signature-ed25519']
@@ -61,23 +61,20 @@ def interact(raw_request):
         userID = raw_request["member"]["user"]["id"]
         print(userID)
 
-        # The command being execute
+        # The command being executed
         command_name = data["name"]
 
-        if db.get_item("date") == -1:
-            db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
-        else:
-            date_string = db.get_item("date")
-            current_date = datetime.strptime(date_string, "%Y-%m-%d")
+        # if db.get_item("date") == -1:
+        #     db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
+        # else:
+        #     date_string = db.get_item("date")
+        #     current_date = datetime.strptime(date_string, "%Y-%m-%d")
 
-            if current_date.month < datetime.now().month:
-                db.reset_table()
-            if current_date.year < datetime.now().year:
-                db.reset_table()
-            if current_date.day < datetime.now().day:
-                db.reset_table()
+        #     if current_date.date() < datetime.now().date():
+        #         send("Please wait. Refreshing Daily Query Limits", id, token)
+        #         db.reset_table()
                 
-            db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
+        #     db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
 
         match command_name:
             
@@ -104,8 +101,8 @@ def interact(raw_request):
                     db.add_item(userID, 0)
                 
                 if db.get_item(userID) >= MAX_QUERIES:
-                    message_content = "You have reached the limit of 10 queries per day. Please wait for a while.\n"
-                    message_content += ":red_circle: 10 / 10"
+                    message_content = f"You have reached the limit of {MAX_QUERIES} queries per day. Please wait for a while.\n"
+                    message_content += f":red_circle: {MAX_QUERIES} / {MAX_QUERIES}"
                 else:
                     # Immediately send an interaction response back to discord to prevent a timeout
                     send(":sparkles: Rowdy is thinking :sparkles:", id, token)
@@ -114,7 +111,7 @@ def interact(raw_request):
                     original_message = data["options"][0]["value"]
                     result = llm.invoke_llm(original_message, userID)
 
-                    result += "\n :green_circle: " + str(db.get_item(userID) + 1) + " / 10"
+                    result += f"\n :green_circle: " + str(db.get_item(userID) + 1) + " / {MAX_QUERIES}"
 
                     # Edit the interaction response sent earlier
                     update(result, token)

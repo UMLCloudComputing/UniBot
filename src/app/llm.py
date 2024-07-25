@@ -104,6 +104,8 @@ def LLMTitanPremier(input, userID):
     print(bedrockObj)
 
     eventStream = bedrockObj['completion']
+    url = ""
+
     for event in eventStream:
         print(event)
         if 'chunk' in event:
@@ -112,32 +114,12 @@ def LLMTitanPremier(input, userID):
         if 'attribution' in event['chunk']:
             for citations in event['chunk']['attribution']['citations']:
                 for references in citations['retrievedReferences']:
-                    uri = references['location']['s3Location']['uri']
-                    filename = extract_filename(uri)
-                    metadata = filename + ".json"
+                    print(f"Metadata\n{references}")
+                    url = references.get('metadata').get('url')
 
-                    print(metadata)
-
-                    s3 = boto3.client('s3', aws_access_key_id=AWS_ID, aws_secret_access_key=AWS_KEY)
-                    obj = s3.get_object(Bucket=CITATION_BUCKET, Key=metadata)
-                    data = json.loads(obj['Body'].read().decode('utf-8'))
-
-                    returnString = returnString + "\n" + data['url']
-
-    return returnString + "\n"
-
-def extract_filename(s3_uri):
-    # Regex pattern to match the filename at the end of the URI
-    pattern = r'[^/]+$'
-    # Search for the pattern in the URI and extract the filename
-    match = re.search(pattern, s3_uri)
-    if match:
-        return match.group()
-    else:
-        return None
+    return f"{returnString}\nFind more information: {url}"
 
 # Augmented Prompts
-
 def UMLNowAugment(message):
 
     prompt_template3 = '''\n
