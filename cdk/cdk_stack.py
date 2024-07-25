@@ -7,6 +7,7 @@ from aws_cdk import (
     aws_lambda as _lambda,
     aws_apigateway as apigateway,
     Duration,
+    aws_dynamodb as dynamodb,
     CfnOutput
 )
 from constructs import Construct
@@ -261,6 +262,8 @@ class CdkStack(Stack):
             #     "tags_key": "tags"
             # }
         )
+
+        table = dynamodb.TableV2(self, f"Table{construct_id}", partition_key=dynamodb.Attribute(name="userID", type=dynamodb.AttributeType.STRING))
         
         dockerFunc = _lambda.DockerImageFunction(
             scope=self,
@@ -271,7 +274,7 @@ class CdkStack(Stack):
                 "AGENT_ALIAS": cfn_agent_alias.attr_agent_alias_id,
                 "AWS_ID": os.getenv('AWS_ACCESS_KEY_ID'),
                 "AWS_KEY": os.getenv('AWS_SECRET_ACCESS_KEY'),
-                "DYNAMO_TABLE" : os.getenv('DYNAMO_TABLE'),
+                "DYNAMO_TABLE" : table.table_name,
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
                 "ID" : os.getenv('ID')
             },            
@@ -285,5 +288,7 @@ class CdkStack(Stack):
             handler=dockerFunc,
             proxy=True,
         )
+
+        
 
         # CfnOutput(self, "Knowledge Base ID: ", value=cfn_knowledge_base.attr_knowledge_base_id)
