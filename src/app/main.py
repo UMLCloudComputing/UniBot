@@ -4,7 +4,6 @@ import llm
 import course
 import json
 import db
-import time
 from datetime import datetime
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
@@ -127,9 +126,10 @@ def interact(raw_request):
 
             # Command /course [arg1: COURSE ID] [arg2: option]
             case "course":
-                course_id = data["options"][0]["value"]
-                course_op = data["options"][1]["value"]
-                message_content = course.course_info(course_op, course_id)
+                send(":sparkles: Thinking :sparkles:", id, token)
+                course_message = data["options"][0]["value"]
+                message_content = course.invoke_llm(course_message)
+                update(message_content, token)
 
             # Command /pizza
             # Fun little command that prints pizza.
