@@ -4,3 +4,4 @@ aws-cdk-lib==2.144.0
 constructs>=10.0.0,<11.0.0
 requests
 pyyaml
+python-dotenv
