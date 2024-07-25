@@ -17,45 +17,45 @@ AGENT_ID = os.getenv("AGENT_ID")
 # CITATION_BUCKET = os.getenv("CITATION_BUCKET")
 
 def invoke_llm(input, userID):
-    # Check if the user is asking about a course
-    isCourse = LLMTitanLite(isCourseAugment(input))
+    # # Check if the user is asking about a course
+    # isCourse = LLMTitanLite(isCourseAugment(input))
 
-    # Course specific question about UML
-    if isCourse == "yes":
-        # Regex that filters out course IDs
-        list = course_process(input)
+    # # Course specific question about UML
+    # if isCourse == "yes":
+    #     # Regex that filters out course IDs
+    #     list = course_process(input)
 
-        # Decide what user is asking about for courses
-        outputText = LLMTitanLite(UMLNowAugment(input))
+    #     # Decide what user is asking about for courses
+    #     outputText = LLMTitanLite(UMLNowAugment(input))
 
-        match outputText:
-            case "prerequisites":
-                result = course.course_info("prereq", list[0])
+    #     match outputText:
+    #         case "prerequisites":
+    #             result = course.course_info("prereq", list[0])
 
-                prompt = "Please summarize the following prerequisites concisely\n"
+    #             prompt = "Please summarize the following prerequisites concisely\n"
 
-                return LLMTitanLite(prompt + result)
+    #             return LLMTitanLite(prompt + result)
 
 
-                # parts = result.split("Co-req:")
-                # pre = parts[0].strip()
-                # co = parts[1].strip() if len(parts) > 1 else ""
+    #             # parts = result.split("Co-req:")
+    #             # pre = parts[0].strip()
+    #             # co = parts[1].strip() if len(parts) > 1 else ""
 
-                # if co == "":
-                #     return f"The prerequisites of the course are {pre}"
-                # return f"The prerequisites of {list[0]} are {pre} the co-requisites are {co}"
+    #             # if co == "":
+    #             #     return f"The prerequisites of the course are {pre}"
+    #             # return f"The prerequisites of {list[0]} are {pre} the co-requisites are {co}"
 
-            case "name": 
-                result = course.course_info("name", list[0])
-                return f"The name of {list[0]} is {result}"
+    #         case "name": 
+    #             result = course.course_info("name", list[0])
+    #             return f"The name of {list[0]} is {result}"
 
-            case "credits": 
-                name = course.course_info("name", list[0])
-                result = course.course_info("credits", list[0])
-                return f"The course {name} is worth {result} credits"
+    #         case "credits": 
+    #             name = course.course_info("name", list[0])
+    #             result = course.course_info("credits", list[0])
+    #             return f"The course {name} is worth {result} credits"
 
-    else:
-        return LLMTitanPremier(input, userID)
+    # else:
+    return LLMTitanPremier(input, userID)
 
 # Call The Titan Lite Model (No RAG Capabilities, only for decision making and scraping UML Now)
 def LLMTitanLite(input):
