@@ -96,6 +96,8 @@ def interact(raw_request):
 
             # Command /chat [arg1: message]
             case "chat":
+                # Immediately send an interaction response back to discord to prevent a timeout
+                send(":sparkles: Thinking :sparkles:", id, token)
 
                 if db.get_item(userID) == -1:
                     db.add_item(userID, 0)
@@ -104,14 +106,11 @@ def interact(raw_request):
                     message_content = f"You have reached the limit of {MAX_QUERIES} queries per day. Please wait for a while.\n"
                     message_content += f":red_circle: {MAX_QUERIES} / {MAX_QUERIES}"
                 else:
-                    # Immediately send an interaction response back to discord to prevent a timeout
-                    send(":sparkles: Rowdy is thinking :sparkles:", id, token)
-
                     # Invoke the LLM model
                     original_message = data["options"][0]["value"]
                     result = llm.invoke_llm(original_message, userID)
 
-                    result += f"\n :green_circle: " + str(db.get_item(userID) + 1) + " / {MAX_QUERIES}"
+                    result += f"\n :green_circle: " + str(db.get_item(userID) + 1) + f" / {MAX_QUERIES}"
 
                     # Edit the interaction response sent earlier
                     update(result, token)

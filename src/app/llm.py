@@ -14,7 +14,7 @@ AWS_KEY = os.getenv("AWS_KEY")
 MAX_TOKEN = os.getenv("MAX_TOKEN", 256)
 AGENT_ALIAS = os.getenv("AGENT_ALIAS")
 AGENT_ID = os.getenv("AGENT_ID")
-CITATION_BUCKET = os.getenv("CITATION_BUCKET")
+# CITATION_BUCKET = os.getenv("CITATION_BUCKET")
 
 def invoke_llm(input, userID):
     # Check if the user is asking about a course
@@ -112,12 +112,13 @@ def LLMTitanPremier(input, userID):
             data = event['chunk']['bytes'].decode('utf-8')
             returnString = data
         if 'attribution' in event['chunk']:
+            print(event['chunk']['attribution'])
             for citations in event['chunk']['attribution']['citations']:
                 for references in citations['retrievedReferences']:
                     print(f"Metadata\n{references}")
                     url = references.get('metadata').get('url')
 
-    return f"{returnString}\nFind more information: {url}"
+    return f"{returnString}\n {url}"
 
 # Augmented Prompts
 def UMLNowAugment(message):
