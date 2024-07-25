@@ -47,3 +47,8 @@ jobs:
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         ID: ${{secrets.ID}}
 
+    - name: Register Commands
+      run: cd commands && python3 register_commands.py
+      env:
+        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+        ID: ${{secrets.ID}}
