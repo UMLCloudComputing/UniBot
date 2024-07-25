@@ -161,12 +161,26 @@ AWS_SECRET_ACCESS_KEY=
 ```
 PINECONE_URL = 
 ```
-7. Create a new API key in Pinecone. Create a new Secret in AWS Secrets Manager and choose "Other type of secret". Set the key as "apiKey" and the value as your pinecone API key. 
+7. Create a new API key in Pinecone. Create a new Secret in AWS Secrets Manager and choose "Other type of secret". Set the key as "apiKey" and the value as your pinecone API key.
+
+First click on the "Store a New Secret" button.
+![image](docs/rowdybot/imgs/Step1Secrets.png)
+
+Then click on the "Other type of secret" button (circled in Red).
+In the key/value pairs section, set the field circled orange to the exact text `apiKey`. Set the field circled in blue to your Pinecone API Key. Then click next
+![image](docs/rowdybot/imgs/Step2Secrets.png)
+
+In the orange box, name your secret whatever you wish. Click Next.
+![image](docs/rowdybot/imgs/Step3Secrets.png)
+
+Click Next Again to finish creating the secret. Now copy the ARN of the secret and store it in the `.env` file.
+![image](docs/rowdybot/imgs/Step4Secrets.png)
+
 8. Store the ARN of the secret in `PINECONE_API_KEY`.
 ```
 PINECONE_API_KEY =
 ```
-8. Finally, run `cdk bootstrap` to setup the cdk project.
+1. Finally, run `cdk bootstrap` to setup the cdk project.
 
 ## 📦 Deploying
 
