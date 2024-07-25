@@ -91,13 +91,15 @@ When the bot is not in use, the Lambda Function will not run, significantly savi
 
 ### Dependencies
 
+You need the following tools:
 - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 - [Node.JS](https://github.com/nvm-sh/nvm)
 - Python `sudo apt install python3`
 - AWS CDK `npm install -g aws-cdk`
-- Pyyaml `pip install pyyaml`
-- Requests `pip install requests`
 
+Then run
+`npm install`
+`pip install -r requirements.txt`
 
 ### Request Access to LLM Models
 
@@ -155,36 +157,18 @@ DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
-1. Create a DyanmoDB table and note down the name. You will need this in the following steps
-2. Create a Pinecone Account, and create a new index. Note down the URL of the Index in `PINECONE_URL`.
-3. Create a new API key in Pinecone. Create a new Secret in AWS Secrets Manager and choose "Other type of secret". Set the key as "apiKey" and the value as your pinecone API key. 
-4. Store the ARN of the secret in `PINECONE_API_KEY`. In the future, this will be done automatically.
-5. Make sure these environmental variables are in your `.env` file.
+6. Create a Pinecone Account, and create a new index. Note down the URL of the Index in `PINECONE_URL`.
 ```
-# AWS Credentials
-AWS_ACCESS_KEY_ID=<AWS Access Key ID>
-AWS_SECRET_ACCESS_KEY=<AWS Access Secret Key>
-APP_NAME=<The Name of Your Application. Can be anything you want.>
-DYNAMO_TABLE=
-
-# Pinecone
 PINECONE_URL = 
+```
+7. Create a new API key in Pinecone. Create a new Secret in AWS Secrets Manager and choose "Other type of secret". Set the key as "apiKey" and the value as your pinecone API key. 
+8. Store the ARN of the secret in `PINECONE_API_KEY`.
+```
 PINECONE_API_KEY =
-
-# Discord
-TOKEN=<Discord Bot Secret Key>
-ID=<Discord Bot ID>
-DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 ```
 8. Finally, run `cdk bootstrap` to setup the cdk project.
 
-</details>
-
-
 ## 📦 Deploying
-
-<details>
-<summary>Deployments</summary>
 
 1. Run `cdk bootstrap` to setup the project for deployment.
 2. Deploy to lambda by running `cdk deploy`.
@@ -195,9 +179,7 @@ DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 
 ## 👉 Commands
 
-<details>
-<summary>Register Commands</summary>
-
+### Registering Commands
 1. Create an `.env` file in the root directory of the project. Do not upload this file to github, it contains secrets.
 2. Make sure these environmental variables are in your `.env` file.
    1. `TOKEN=<your discord bot token>`
@@ -216,24 +198,15 @@ DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
       type: 3 # string
       required: true
 ```
-4. From your root directory, run `python3 register_commands.py`
-5. You should receive the status `201` or `200` printing out in your terminal.
-</details>
+1. From your root directory, run `python3 register_commands.py`
+2. You should receive the status `201` or `200` printing out in your terminal.
 
-<details>
-<summary>Define Commands</summary>
-
+### Defining Commands
 1. Commands can be defined in the file `src/app/main.py`
 2. You can register commands in the `interact` function by adding more `elif` statements. 
    1. The parameters of the command that are received from the user is in encoded in the variable `data`. The statement `data["options"][n]["value"]` will extract the argument `n`.   
    2. The message that the bot returns to the user is specified in the string variable `message_content`. It is crucial that `message_content` is a string.
    3. Following the example of the `/weather` command, you may choose to call an external function that returns a string for better code readability.
-  
-</details>
-
-
-
-</details>
 
 ## 🏗 Technologies:
 
@@ -242,16 +215,9 @@ DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 - ![Infastructure as Code](https://img.shields.io/badge/Infastructure_as_Code-FFA500?style=for-the-badge&logo=terraform&logoColor=white)
 - ![Amazon Bedrock](https://img.shields.io/badge/Amazon_Bedrock-CA2C92?style=for-the-badge&logo=amazonbedrock&logoColor=white)
 
-
-
-## 🎉 Invite link
-[Invite Link](https://discord.com/oauth2/authorize?client_id=1241285489969856514&permissions=8&scope=bot%20applications.commands)
-
 ## 🎉 Acknowledgments
 
 Many thanks to the [UMass Lowell Cloud Computing Club](https://umasslowellclubs.campuslabs.com/engage/organization/cloudcomputingclub) members, our faculty advisor [Dr. Johannes Weis](https://www.uml.edu/sciences/computer-science/people/weis-johannes.aspx), and the [UMass Lowell Computer Science Department](https://www.uml.edu/Sciences/computer-science/) for their support and guidance.
-
-
 
 [![Contributors](https://contributors-img.web.app/image?repo=UMLCloudComputing/rowdybot)](https://github.com/UMLCloudComputing/rowdybot/graphs/contributors)
 
