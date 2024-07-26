@@ -15,6 +15,8 @@ def invoke_llm(input):
     # Decide what user is asking about for courses
     outputText = LLMTitanLite(UMLNowAugment(input))
 
+    print(outputText)
+
     match outputText:
         case "prerequisites":
             result = course_info("prereq", list[0])
@@ -24,7 +26,7 @@ def invoke_llm(input):
             result = course_info("name", list[0])
             return f"The name of {list[0]} is {result}"
 
-        case "credits": 
+        case _ if re.search(r"credits", outputText, re.IGNORECASE): 
             name = course_info("name", list[0])
             result = course_info("credits", list[0])
             return f"The course {name} is worth {result} credits"
