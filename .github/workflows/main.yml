@@ -46,9 +46,11 @@ jobs:
         PINECONE_API_KEY: ${{secrets.PINECONE_API_KEY}}
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         ID: ${{secrets.ID}}
+        TOKEN: ${{secrets.TOKEN}}
 
     - name: Register Commands
       run: cd commands && python3 register_commands.py
       env:
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         ID: ${{secrets.ID}}
+        TOKEN: ${{secrets.TOKEN}}
