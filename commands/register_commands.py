@@ -22,3 +22,5 @@ def register():
         command_name = command["name"]
         print(f"Command {command_name} created: {response.status_code}")
         time.sleep(3)
+
+register()

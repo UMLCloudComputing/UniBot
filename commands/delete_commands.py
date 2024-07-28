@@ -30,4 +30,4 @@ def delete():
         print(f"Deleted {command}")
         time.sleep(2)
 
-        
+delete()
