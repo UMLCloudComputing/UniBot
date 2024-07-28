@@ -1,6 +1,3 @@
-- name: hello
-  description: Say hello!
-
 - name: chat
   description: Chat with the bot or ask questions!
   options:
@@ -8,25 +5,6 @@
       description: The message to chat with the bot.
       type: 3 # string
       required: true
-
-- name: weather
-  description: Get the current weather in a certain city.
-  options:
-    - name: city
-      description: The city to get the weather for.
-      type: 3 # string
-      required: true
-
-- name: echo
-  description: Echo message back to sender.
-  options:
-    - name: message
-      description: The message to echo back.
-      type: 3 # string
-      required: true
-
-- name: pizza
-  description: Prints out pizza 🍕
   
 - name: course
   description: Get information about an UML course
