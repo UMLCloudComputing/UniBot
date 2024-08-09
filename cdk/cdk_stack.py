@@ -119,7 +119,8 @@ class CdkStack(Stack):
                 "AWS_KEY": os.getenv('AWS_SECRET_ACCESS_KEY'),
                 "DYNAMO_TABLE" : table.table_name,
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
-                "ID" : os.getenv('ID')
+                "ID" : os.getenv('ID'),
+                "KB_ID" : cfn_knowledge_base.attr_knowledge_base_id,
             },            
             code=_lambda.DockerImageCode.from_image_asset(
                 directory="src"
