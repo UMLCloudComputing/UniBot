@@ -1,78 +1,49 @@
 import boto3
 import os
-# from dotenv import load_dotenv
+from datetime import datetime, timezone
 
-# load_dotenv()
-
-DYNAMO_ID = os.getenv('AWS_ID')
-DYNAMO_KEY = os.getenv('AWS_KEY')
 DYNAMO_TABLE = os.getenv('DYNAMO_TABLE')
 
-
-def reset_table():
-    dynamodb = boto3.resource(
-        'dynamodb',
-        region_name='us-east-1',
-        aws_access_key_id=DYNAMO_ID,
-        aws_secret_access_key=DYNAMO_KEY
-    )
+# def get_item(id):
+#     dynamodb = boto3.resource(
+#         'dynamodb',
+#         region_name='us-east-1',
+#     )
+#     try:
+#         table = dynamodb.Table(DYNAMO_TABLE) 
+#         response = table.get_item(Key={"userID": id})
+#         item = response.get("Item")
+#         return item["Query"]
+#     except Exception:
+#         return -1
+    
+def get_all_items(id):
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
     table = dynamodb.Table(DYNAMO_TABLE)
-    table.delete()
-    table.wait_until_not_exists()
-    print("Table deleted Successfully")
-
-    table = dynamodb.create_table(
-        TableName=DYNAMO_TABLE,
-        KeySchema=[
-            {
-                'AttributeName': 'userID',
-                'KeyType': 'HASH'
-            }
-        ],
-        AttributeDefinitions=[
-            {
-                'AttributeName': 'userID',
-                'AttributeType': 'S'
-            }
-        ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
-        }
-    )
-    table.wait_until_exists()
-    print("Table reset successfully!")
-
-def get_item(id):
-    dynamodb = boto3.resource(
-        'dynamodb',
-        region_name='us-east-1',
-        aws_access_key_id=DYNAMO_ID,
-        aws_secret_access_key=DYNAMO_KEY
-    )
+    
     try:
-        table = dynamodb.Table(DYNAMO_TABLE) 
-        response = table.get_item(Key={"userID": id})
-        item = response.get("Item")
-        return item["Query"]
-    except Exception:
-        return -1
+        response = table.query(
+            KeyConditionExpression=boto3.dynamodb.conditions.Key('userID').eq(id)
+        )
+        items = response.get('Items', [])
+        return items
+    except Exception as e:
+        print(f"Error querying items: {e}")
+        return []
 
 
 def add_item(id, value):
-    dynamodb = boto3.resource(
-        'dynamodb',
-        region_name='us-east-1',
-        aws_access_key_id=DYNAMO_ID,
-        aws_secret_access_key=DYNAMO_KEY
-    )
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
 
     table = dynamodb.Table(DYNAMO_TABLE)
+
+    timestamp = datetime.now(timezone.utc).isoformat()
 
     response = table.put_item(
         Item={
             'userID': id,
-            'Query' : value,
+            'timestamp' : timestamp,
+            'UserMessages': value,
         }
     )
 

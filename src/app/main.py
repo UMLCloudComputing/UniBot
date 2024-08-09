@@ -97,27 +97,29 @@ def interact(raw_request):
             case "chat":
                 # Immediately send an interaction response back to discord to prevent a timeout
                 send(":sparkles: Thinking :sparkles:", id, token)
+                result = llm.invoke_llm(original_message, userID)
+                update(result, token)
 
-                if db.get_item(userID) == -1:
-                    db.add_item(userID, 0)
+                # if db.get_item(userID) == -1:
+                #     db.add_item(userID, 0)
                 
-                if db.get_item(userID) >= MAX_QUERIES:
-                    message_content = f"You have reached the limit of {MAX_QUERIES} queries per day. Please wait for a while.\n"
-                    message_content += f":red_circle: {MAX_QUERIES} / {MAX_QUERIES}"
-                else:
-                    # Invoke the LLM model
-                    original_message = data["options"][0]["value"]
-                    result = llm.invoke_llm(original_message, userID)
+                # if db.get_item(userID) >= MAX_QUERIES:
+                #     message_content = f"You have reached the limit of {MAX_QUERIES} queries per day. Please wait for a while.\n"
+                #     message_content += f":red_circle: {MAX_QUERIES} / {MAX_QUERIES}"
+                # else:
+                #     # Invoke the LLM model
+                #     original_message = data["options"][0]["value"]
+                #     result = llm.invoke_llm(original_message, userID)
 
-                    result += f"\n :green_circle: " + str(db.get_item(userID) + 1) + f" / {MAX_QUERIES}"
+                #     result += f"\n :green_circle: " + str(db.get_item(userID) + 1) + f" / {MAX_QUERIES}"
 
-                    # Edit the interaction response sent earlier
-                    update(result, token)
+                #     # Edit the interaction response sent earlier
+                #     update(result, token)
 
-                    newCount = db.get_item(userID) + 1
-                    db.add_item(userID, newCount)
+                #     newCount = db.get_item(userID) + 1
+                #     db.add_item(userID, newCount)
 
-                    message_content = "None"
+                #     message_content = "None"
 
             # Command /weather [arg1: city]
             # Gets the weather in just Lowell for now. Ignores the argument for city
