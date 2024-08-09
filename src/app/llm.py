@@ -24,7 +24,7 @@ from langchain_community.chat_message_histories import DynamoDBChatMessageHistor
 #     }
 # )
 
-DYNAMO_TABLE = "MessageHistory"
+DYNAMO_TABLE = os.getenv('DYNAMO_TABLE')
 
 # os.environ["AWS_ACCESS_KEY_ID"] = os.getenv('AWS_ID')
 # os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv('AWS_KEY')
