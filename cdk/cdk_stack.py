@@ -103,6 +103,23 @@ class CdkStack(Stack):
             ),
             knowledge_base_id=cfn_knowledge_base.attr_knowledge_base_id,
             name=f"source{construct_id}",
+
+            data_deletion_policy="DELETE",
+            # description="description",
+            # server_side_encryption_configuration=bedrock.CfnDataSource.ServerSideEncryptionConfigurationProperty(
+            #     kms_key_arn="kmsKeyArn"
+            # ),
+            vector_ingestion_configuration=bedrock.CfnDataSource.VectorIngestionConfigurationProperty(
+                chunking_configuration=bedrock.CfnDataSource.ChunkingConfigurationProperty(
+                    chunking_strategy="NONE",
+
+                    # # the properties below are optional
+                    # fixed_size_chunking_configuration=bedrock.CfnDataSource.FixedSizeChunkingConfigurationProperty(
+                    #     max_tokens=123,
+                    #     overlap_percentage=123
+                    # )
+                )
+            )
         )
 
         table = dynamodb.TableV2(self, f"Table{construct_id}",
@@ -127,6 +144,18 @@ class CdkStack(Stack):
             ),
             timeout=Duration.seconds(300)
         )
+
+        # Define the IAM policy statement
+        bedrock_policy_statement = iam.PolicyStatement(
+            actions=[
+                "bedrock:Retrieve",
+                "bedrock:InvokeModel"
+            ],
+            resources=["*"]  # Adjust the resource ARN as needed
+        )
+
+        # Attach the policy to the Lambda function's role
+        dockerFunc.add_to_role_policy(bedrock_policy_statement)
 
         api = apigateway.LambdaRestApi(self, f"API{construct_id}",
             handler=dockerFunc,
