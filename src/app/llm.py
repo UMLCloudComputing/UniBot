@@ -26,6 +26,9 @@ from langchain_community.chat_message_histories import DynamoDBChatMessageHistor
 
 DYNAMO_TABLE = "MessageHistory"
 
+# os.environ["AWS_ACCESS_KEY_ID"] = os.getenv('AWS_ID')
+# os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv('AWS_KEY')
+
 # os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # ------------------------------------------------------
@@ -39,6 +42,8 @@ logging.getLogger().setLevel(logging.ERROR) # reduce log level
 bedrock_runtime = boto3.client(
     service_name="bedrock-runtime",
     region_name="us-east-1",
+    aws_access_key_id=os.getenv('AWS_ID'),
+    aws_secret_access_key=os.getenv('AWS_KEY'),
     # aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
     # aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
 )
@@ -46,6 +51,8 @@ bedrock_runtime = boto3.client(
 retrieval_runtime = boto3.client(
     service_name="bedrock-agent-runtime",
     region_name="us-east-1",
+    aws_access_key_id=os.getenv('AWS_ID'),
+    aws_secret_access_key=os.getenv('AWS_KEY'),
     # aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
     # aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
 )
@@ -106,21 +113,6 @@ chain = (
     .pick(["response", "context"])
 )
 
-# Streamlit Chat Message History
-history = DynamoDBChatMessageHistory(table_name=DYNAMO_TABLE, session_id="0")
-
-# DynamoDB Chat Message History
-# history = DynamoDBChatMessageHistory(
-
-# Chain with History
-chain_with_history = RunnableWithMessageHistory(
-    chain,
-    lambda session_id: history,
-    input_messages_key="question",
-    history_messages_key="history",
-    output_messages_key="response",
-)
-
 # ------------------------------------------------------
 # Pydantic data model and helper function for Citations
 
@@ -139,7 +131,18 @@ chain_with_history = RunnableWithMessageHistory(
 config = {"configurable": {"session_id": "any"}}
 
 
-def invoke_llm(prompt):
+def invoke_llm(prompt, userID):
+    # DynamoDB Chat History
+    history = DynamoDBChatMessageHistory(table_name=DYNAMO_TABLE, session_id=userID)
+
+    # Chain with History
+    chain_with_history = RunnableWithMessageHistory(
+        chain,
+        lambda session_id: history,
+        input_messages_key="question",
+        history_messages_key="history",
+        output_messages_key="response",
+    )
     response = chain_with_history.invoke(
         {"question" : prompt, "history" : history},
         config

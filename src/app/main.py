@@ -97,6 +97,7 @@ def interact(raw_request):
             case "chat":
                 # Immediately send an interaction response back to discord to prevent a timeout
                 send(":sparkles: Thinking :sparkles:", id, token)
+                original_message = data["options"][0]["value"]
                 result = llm.invoke_llm(original_message, userID)
                 update(result, token)
 
