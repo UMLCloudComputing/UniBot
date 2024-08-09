@@ -49,7 +49,7 @@ jobs:
         TOKEN: ${{secrets.TOKEN}}
 
     - name: Register & Delete Commands
-      run: cd commands && python3 register_commands.py && python3 delete_commands.py
+      run: cd commands && python3 register_commands.py
       env:
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         ID: ${{secrets.ID}}
