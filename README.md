@@ -1,4 +1,6 @@
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/7de8019c-f964-4835-a2c2-6975b4cdeea0)
+<div align="center">
+  <img src="docs/rowdybot/imgs/default.svg" alt="UniBot.io" width="450" height="225">
+</div>
 
 <div align="center">
 
@@ -10,7 +12,7 @@
 </div>
 
 ## 📘 About
-A Discord Bot to answers all your questions about UML! Has LLM integration to respond to a wide variety of questions.
+A chatbot for universities! The bot is built using AWS Lambda, Amazon Bedrock, and Pinecone.
 
 ## 👨‍💻 Contributing
 
