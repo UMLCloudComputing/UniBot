@@ -100,6 +100,7 @@ def interact(raw_request):
                 original_message = data["options"][0]["value"]
                 result = llm.invoke_llm(original_message, userID)
                 update(result, token)
+                message_content = "None"
 
                 # if db.get_item(userID) == -1:
                 #     db.add_item(userID, 0)
