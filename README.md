@@ -118,8 +118,10 @@ Click on the Titan Models category and request access to Titan Text G1 - Premier
 
 ### Discord Application Setup
 
+<details>
+<summary>Expand</summary>
+
 1. Go to discord.dev and create a new application.
-2. Follow the documentation here to create a knowledge base that is connected to Pinecone https://docs.pinecone.io/integrations/amazon-bedrock
 
 Navigate to application creation
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/faa98e19-935e-4d27-a37d-afccdbb9cc77)
@@ -127,7 +129,7 @@ Navigate to application creation
 Put the name of your application here and accept the terms of service.
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/cf796994-3e4d-4e8f-b208-0e191fa0a6d3)
 
-6. Get your Bot ID, Secret Key, and Public Key. Examples of where you find them are below.
+2. Get your Bot ID, Secret Key, and Public Key. Examples of where you find them are below.
 
 Bot ID:
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/fc627f8a-ef30-4a3a-a8e3-1fc1dff7884c)
@@ -138,49 +140,37 @@ Secret Key:
 Public Key:
 ![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/595f713f-c415-4b1d-937f-86929e0c5e00)
 
-7. Save them to a `.env` file. You will be needing these in the next step.
+1. Create an `.env` file with the following variables. You will be needing these in the next step.
 ```
 # Discord
 TOKEN=<Discord Bot Secret Key>
 ID=<Discord Bot ID>
 DISCORD_PUBLIC_KEY=<Discord Bot Public Key>
 ```
+</details>
 
 ### Local Development Setup
    
 1. Install the tools listed in the Dependencies section of the README.md
 2. Clone the repository to a your local device.
-3. Create an IAM user and give them full access to Amazon Bedrock, DynamoDB, S3, and AWS Lambda.
-4. Run `aws configure` to setup your AWS credentials.
-5. Create a .env in the root of the repository. Enter your AWS credentials as such:
+3. Make sure you have a `.env` file.
+4. Add the following environmental variables `APP_NAME` and `PINECONE_URL` and `PINECONE_API_KEY` to the `.env` file.
 ```
-AWS_ACCESS_KEY_ID=
-AWS_SECRET_ACCESS_KEY=
-```
-6. Create a Pinecone Account, and create a new index. Note down the URL of the Index in `PINECONE_URL`.
-```
+# Discord
+TOKEN=
+ID=
+DISCORD_PUBLIC_KEY=
+
+APP_NAME=
 PINECONE_URL = 
-```
-7. Create a new API key in Pinecone. Create a new Secret in AWS Secrets Manager and choose "Other type of secret". Set the key as "apiKey" and the value as your pinecone API key.
-
-First click on the "Store a New Secret" button.
-![image](docs/rowdybot/imgs/Step1Secrets.png)
-
-Then click on the "Other type of secret" button (circled in Red).
-In the key/value pairs section, set the field circled orange to the exact text `apiKey`. Set the field circled in blue to your Pinecone API Key. Then click next
-![image](docs/rowdybot/imgs/Step2Secrets.png)
-
-In the orange box, name your secret whatever you wish. Click Next.
-![image](docs/rowdybot/imgs/Step3Secrets.png)
-
-Click Next Again to finish creating the secret. Now copy the ARN of the secret and store it in the `.env` file.
-![image](docs/rowdybot/imgs/Step4Secrets.png)
-
-8. Store the ARN of the secret in `PINECONE_API_KEY`.
-```
 PINECONE_API_KEY =
 ```
-1. Finally, run `cdk bootstrap` to setup the cdk project.
+5. Create an IAM user and give them full access to Amazon Bedrock, DynamoDB, S3, and AWS Lambda.
+6. Run `aws configure` to setup your AWS credentials.
+7. Create a Pinecone Account, and create a new index. Note down the URL of the Index in `PINECONE_URL`.
+8. `aws secretsmanager create-secret --name MySecret --secret-string '{"apiKey":"12345"}'` to create a secret in AWS Secrets Manager. Replace   `12345` with your Pinecone API Key. Replace MySecret with the name of your secret.
+9. `aws secretsmanager describe-secret --secret-id MySecret --query 'ARN' --output text` to get the ARN of the secret. Replace MySecret with the name of your secret.
+10. Store the ARN in the `.env` file as `PINECONE_API_KEY`.
 
 ## 📦 Deploying
 
