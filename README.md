@@ -1,4 +1,4 @@
-![image](https://github.com/UMLCloudComputing/rowdybot/assets/136134023/7de8019c-f964-4835-a2c2-6975b4cdeea0)
+![UniBot.io](docs/rowdybot/imgs/default.svg)
 
 <div align="center">
 
