@@ -12,7 +12,7 @@
 </div>
 
 ## 📘 About
-A Discord Bot to answers all your questions about UML! Has LLM integration to respond to a wide variety of questions.
+A chatbot for universities! The bot is built using AWS Lambda, Amazon Bedrock, and Pinecone.
 
 ## 👨‍💻 Contributing
 
