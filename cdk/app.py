@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from cdk.cdk_stack import CdkStack
+from cdk_stack import CdkStack
 
 
 app = cdk.App()
