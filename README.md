@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="docs/rowdybot/imgs/default.svg" alt="UniBot.io" width="800" height="400">
+  <img src="docs/rowdybot/imgs/default.svg" alt="UniBot.io" width="300" height="150">
 </div>
 
 <div align="center">
