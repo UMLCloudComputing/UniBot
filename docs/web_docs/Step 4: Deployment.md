@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 ## 📦 Deploying
 
 1. Run `cdk bootstrap` to setup the project for deployment.

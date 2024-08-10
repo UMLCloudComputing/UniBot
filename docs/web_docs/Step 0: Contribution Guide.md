@@ -1,9 +1,10 @@
+---
+sidebar_position: 1
+---
+
 ## 👨‍💻 Contributing
 
 Contributions are what make the open-source community an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-<details>
-<summary>Contributions</summary>
 
 Follow these steps to contribute to the project with a new feature or bug fix:
 
@@ -56,5 +57,3 @@ Go to the GitHub repository page and click on the "Pull request" button. Select 
 Wait for the project maintainers to review your pull request. They may request changes. Once your pull request is approved, a project maintainer will merge it into the main branch.
 
 Thank you for your contribution!
-
-</details>

@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 ### Local Development Setup
    
 1. Install the tools listed in the Dependencies section of the README.md
