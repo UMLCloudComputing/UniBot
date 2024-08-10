@@ -132,8 +132,6 @@ class CdkStack(Stack):
             id=f"ID{construct_id}",
             function_name=construct_id,
             environment= {
-                "AWS_ID": os.getenv('AWS_ACCESS_KEY_ID'),
-                "AWS_KEY": os.getenv('AWS_SECRET_ACCESS_KEY'),
                 "DYNAMO_TABLE" : table.table_name,
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
                 "ID" : os.getenv('ID'),
