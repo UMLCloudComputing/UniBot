@@ -1,4 +1,6 @@
-![UniBot.io](docs/rowdybot/imgs/default.svg)
+<div align="center">
+  <img src="docs/rowdybot/imgs/default.svg" alt="UniBot.io" width="200" height="200">
+</div>
 
 <div align="center">
 
