@@ -136,6 +136,7 @@ class CdkStack(Stack):
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
                 "ID" : os.getenv('ID'),
                 "KB_ID" : cfn_knowledge_base.attr_knowledge_base_id,
+                "OPENAI_API_KEY" : os.getenv('OPENAI_API_KEY'),
             },            
             code=_lambda.DockerImageCode.from_image_asset(
                 directory="src"
