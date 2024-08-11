@@ -4,7 +4,8 @@ fire
 boto3
 playwright
 pynacl
+python-dotenv
 langchain-core
 langchain-aws
 langchain-community
-git+https://github.com/MartinMarwad/UML-NOW-CLI
+langchain_openai

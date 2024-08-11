@@ -1,75 +1,36 @@
 import boto3
 import logging
 import os
-# import streamlit as st
-# from langchain_openai import ChatOpenAI
-# from typing import List, Dict
-# from pydantic import BaseModel
+
+# Data Modeling for Citations
+from typing import List, Dict
+from pydantic import BaseModel
 from operator import itemgetter
+
+# LangChain Core
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough, RunnableParallel
 from langchain_core.output_parsers import StrOutputParser
+
+# Message History
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_aws import ChatBedrock
-from langchain_aws import AmazonKnowledgeBasesRetriever
-from langchain_community.chat_message_histories import StreamlitChatMessageHistory
 from langchain_community.chat_message_histories import DynamoDBChatMessageHistory
 
-# st.set_page_config(
-#     page_title='RowdyLLM',
-#     menu_items={
-#         'Get Help': None,
-#         'Report a bug': None,
-#         'About': None
-#     }
-# )
+# Retrieval Augmented Generation
+from langchain_aws import AmazonKnowledgeBasesRetriever
+from langchain_openai import ChatOpenAI
+
+from dotenv import load_dotenv
+load_dotenv()
 
 DYNAMO_TABLE = os.getenv('DYNAMO_TABLE')
-
-# os.environ["AWS_ACCESS_KEY_ID"] = os.getenv('AWS_ID')
-# os.environ["AWS_SECRET_ACCESS_KEY"] = os.getenv('AWS_KEY')
-
-# os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
-
-# ------------------------------------------------------
-# Log level
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 logging.getLogger().setLevel(logging.ERROR) # reduce log level
-
-# ------------------------------------------------------
-# Amazon Bedrock - settings
-
-bedrock_runtime = boto3.client(
-    service_name="bedrock-runtime",
-    region_name="us-east-1",
-    # aws_access_key_id=os.getenv('AWS_ID'),
-    # aws_secret_access_key=os.getenv('AWS_KEY'),
-    # aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
-    # aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
-)
-
-retrieval_runtime = boto3.client(
-    service_name="bedrock-agent-runtime",
-    region_name="us-east-1",
-    # aws_access_key_id=os.getenv('AWS_ID'),
-    # aws_secret_access_key=os.getenv('AWS_KEY'),
-    # aws_access_key_id=st.secrets["AWS_ACCESS_KEY_ID"],
-    # aws_secret_access_key=st.secrets["AWS_SECRET_ACCESS_KEY"],
-)
-
-model_id = "anthropic.claude-3-haiku-20240307-v1:0"
-
-model_kwargs =  { 
-    "max_tokens": 2048,
-    "temperature": 0.0,
-    "top_k": 250,
-    "top_p": 1,
-    "stop_sequences": ["\n\nHuman"],
-}
+retrieval_runtime = boto3.client(service_name="bedrock-agent-runtime", region_name="us-east-1")
 
 # ------------------------------------------------------
 # LangChain - RAG chain with chat history
-
 
 prompt_text = '''
 You are Rowdy the Riverhawk, a chatbot for the University of Massachusetts Lowell. Provide answers in the style of a tour guide. 
@@ -94,14 +55,7 @@ retriever = AmazonKnowledgeBasesRetriever(
 )
 
 # # OpenAI - GPT-4o-mini model
-# model = ChatOpenAI(model_name="gpt-4o-mini")
-model = ChatBedrock(
-    client=bedrock_runtime,
-    model_id=model_id,
-    model_kwargs=model_kwargs,
-)
-
-
+model = ChatOpenAI(model_name="gpt-4o-mini")
 
 chain = (
     RunnableParallel({
@@ -116,20 +70,16 @@ chain = (
 # ------------------------------------------------------
 # Pydantic data model and helper function for Citations
 
-# class Citation(BaseModel):
-#     page_content: str
-#     metadata: Dict
+class Citation(BaseModel):
+    page_content: str
+    metadata: Dict
 
-# def extract_citations(response: List[Dict]) -> List[Citation]:
-#     return [Citation(page_content=doc.page_content, metadata=doc.metadata) for doc in response]
+def extract_citations(response: List[Dict]) -> List[Citation]:
+    return [Citation(page_content=doc.page_content, metadata=doc.metadata) for doc in response]
 
-# # # Initialize session state for messages if not already present
-# # if "messages" not in st.session_state:
-# #     st.session_state.messages = [{"role": "assistant", "content": "Ask me anything about UMass Lowell!"}]
-
-# # Display chat messages
+# ------------------------------------------------------
+# Display chat messages
 config = {"configurable": {"session_id": "any"}}
-
 
 def invoke_llm(prompt, userID):
     # DynamoDB Chat History
@@ -147,9 +97,16 @@ def invoke_llm(prompt, userID):
         {"question" : prompt, "history" : history},
         config
     )
-    return response['response']
+
+    citations = extract_citations(response["context"])
+    
+    citation_text = "Sources:\n"
+    for x in range(0, 3):
+        citation_text += citations[x].metadata['source_metadata']['url'] + "\n"
+
+    return response['response'] + "\n" + citation_text
 
 
 if __name__ == "__main__":
-    print(invoke_llm("Wait what's my name again?"))
+    print(invoke_llm("how do I register for courses", "12345"))
 

@@ -1,7 +1,6 @@
 import os
 import requests
 import llm
-import course
 import json
 import db
 from datetime import datetime
