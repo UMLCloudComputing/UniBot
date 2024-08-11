@@ -9,3 +9,4 @@ pynacl
 langchain_core
 langchain_aws
 langchain_community
+langchain_openai

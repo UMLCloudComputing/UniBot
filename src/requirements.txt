@@ -4,6 +4,7 @@ fire
 boto3
 playwright
 pynacl
+python-dotenv
 langchain-core
 langchain-aws
 langchain-community
