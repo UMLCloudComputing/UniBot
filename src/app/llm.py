@@ -14,10 +14,12 @@ from langchain_core.output_parsers import StrOutputParser
 
 # Message History
 from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_openai import OpenAIEmbeddings
 from langchain_community.chat_message_histories import DynamoDBChatMessageHistory
 
 # Retrieval Augmented Generation
-from langchain_aws import AmazonKnowledgeBasesRetriever
+from pinecone import Pinecone, ServerlessSpec
+from langchain_pinecone import PineconeVectorStore
 from langchain_openai import ChatOpenAI
 
 from dotenv import load_dotenv
@@ -47,12 +49,10 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-# Amazon Bedrock - KnowledgeBase Retriever 
-retriever = AmazonKnowledgeBasesRetriever(
-    knowledge_base_id=os.getenv("KB_ID"), # 👈 Set your Knowledge base ID
-    client=retrieval_runtime,
-    retrieval_config={"vectorSearchConfiguration": {"numberOfResults": 12}},
-)
+
+pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
+vector_store = PineconeVectorStore(index=pc.Index(os.getenv("INDEX_NAME")), embedding=OpenAIEmbeddings(model="text-embedding-3-small"))
+retriever = vector_store.as_retriever()
 
 # # OpenAI - GPT-4o-mini model
 model = ChatOpenAI(model_name="gpt-4o-mini")
@@ -102,11 +102,11 @@ def invoke_llm(prompt, userID):
     
     citation_text = "Sources:\n"
     for x in range(0, 3):
-        citation_text += citations[x].metadata['source_metadata']['url'] + "\n"
+        citation_text += citations[x].metadata['url'] + "\n"
 
     return response['response'] + "\n" + citation_text
 
 
 if __name__ == "__main__":
-    print(invoke_llm("how do I register for courses", "12345"))
+    print(invoke_llm("what's my name", "12345"))
 
