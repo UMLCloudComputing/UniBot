@@ -1,0 +1,24 @@
+name: Update Vector Index
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # Runs at midnight on the first day of every month
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+    update:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Install dependencies
+              run: |
+                pip install -r requirements.txt
+
+            - name: Update Vector Index
+              run: python3 data/main.py --importdocs
+              env:
+                PINECONE_API_KEY: ${{secrets.PINECONE_API_KEY}}
+                APP_NAME: ${{secrets.APP_NAME}}
+                OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
