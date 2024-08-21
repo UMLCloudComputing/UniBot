@@ -39,7 +39,7 @@ def upsert(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     parsed_text = uml.extract(soup)
-    pc.insert_document(os.getenv("INDEX_NAME"), [parsed_text], [url])
+    pc.insert_document(os.getenv("APP_NAME"), [parsed_text], [url])
 
 def main():
     # Open urls.json file
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("--importdata", action="store_true")
     args = parser.parse_args()
     if args.importdata:
-        pc.import_documents(os.getenv("INDEX_NAME"), 10)
+        pc.import_documents(os.getenv("APP_NAME"), 10)
     else:
-        pc.get_vector_index(os.getenv("INDEX_NAME"))
+        pc.get_vector_index(os.getenv("APP_NAME"))
         main()
