@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - directingest
 
 jobs:
   deploy:
@@ -16,7 +17,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '20'
+        node-version: '22'
 
     - name: Install dependencies
       run: |
@@ -29,10 +30,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         APP_NAME: ${{secrets.APP_NAME}}
-        PINECONE_URL: ${{secrets.PINECONE_URL}}
         PINECONE_API_KEY: ${{secrets.PINECONE_API_KEY}}
-        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         ID: ${{secrets.ID}}
+        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
 
 
@@ -42,11 +42,9 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         APP_NAME: ${{secrets.APP_NAME}}
-        PINECONE_URL: ${{secrets.PINECONE_URL}}
         PINECONE_API_KEY: ${{secrets.PINECONE_API_KEY}}
-        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         ID: ${{secrets.ID}}
-        TOKEN: ${{secrets.TOKEN}}
+        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
         OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
 
     - name: Register & Delete Commands

@@ -98,6 +98,7 @@ def interact(raw_request):
                 send(":sparkles: Thinking :sparkles:", id, token)
                 original_message = data["options"][0]["value"]
                 result = llm.invoke_llm(original_message, userID)
+                print(result)
                 update(result, token)
                 message_content = "None"
 

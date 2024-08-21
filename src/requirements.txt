@@ -9,3 +9,5 @@ langchain-core
 langchain-aws
 langchain-community
 langchain_openai
+pinecone
+langchain_pinecone
