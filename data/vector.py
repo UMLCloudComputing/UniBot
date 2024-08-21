@@ -47,7 +47,7 @@ def import_documents(index, numAtOnce):
     index = pc.Index(index)
 
     # Get all the files in the dataset folder
-    files = os.listdir("dataset")
+    files = os.listdir("data/dataset")
     print(files)
 
     vectors = []
@@ -88,7 +88,7 @@ def insert_document(index, content, url):
                 if not os.path.exists(newpath):
                     os.makedirs(newpath)
 
-                with open(f"dataset/{urls.replace('/', '_')}.json", "w") as file:
+                with open(f"data/dataset/{urls.replace('/', '_')}.json", "w") as file:
                     data = {
                         "url": urls,
                         "embedding": embed["embedding"],
