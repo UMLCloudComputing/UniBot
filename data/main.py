@@ -4,6 +4,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import lxml
+import argparse
 import uml
 import re
 import vector as pc
@@ -54,5 +55,12 @@ def main():
             
 
 if __name__ == "__main__":
-    pc.get_vector_index(os.getenv("INDEX_NAME"))
-    main()
+    # If argument "import" is set, import the documents using argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--importdata", action="store_true")
+    args = parser.parse_args()
+    if args.importdata:
+        pc.import_documents(os.getenv("INDEX_NAME"), 10)
+    else:
+        pc.get_vector_index(os.getenv("INDEX_NAME"))
+        main()
