@@ -32,7 +32,7 @@ def get_vector_index(index_name):
     return vector_store
 
 def process_file(file_name):
-    with open(f"dataset/{file_name}", "r") as file:
+    with open(f"data/dataset/{file_name}", "r") as file:
         data = json.load(file)
         return {
             "id": data["url"],

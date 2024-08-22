@@ -60,7 +60,8 @@ if __name__ == "__main__":
     parser.add_argument("--importdata", action="store_true")
     args = parser.parse_args()
     if args.importdata:
-        pc.import_documents(os.getenv("APP_NAME"), 10)
+        pc.get_vector_index(os.getenv("APP_NAME").lower())
+        pc.import_documents(os.getenv("APP_NAME").lower(), 10)
     else:
-        pc.get_vector_index(os.getenv("APP_NAME"))
+        pc.get_vector_index(os.getenv("APP_NAME").lower())
         main()
