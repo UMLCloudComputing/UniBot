@@ -28,8 +28,13 @@ st.set_page_config(
     }
 )
 
-os.environ["DYNAMO_TABLE"] = st.secrets["DYNAMO_TABLE"]
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["DYNAMO_TABLE"] = os.getenv("DYNAMO_TABLE") or st.secrets["DYNAMO_TABLE"]
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") or st.secrets["OPENAI_API_KEY"]
+try: 
+    os.environ["AWS_ACCESS_KEY_ID"] = st.secrets["AWS_ACCESS_KEY_ID"]
+    os.environ["AWS_SECRET_ACCESS_KEY"] = st.secrets["AWS_SECRET_ACCESS_KEY"]
+except KeyError:
+    print("AWS credentials not found in secrets.toml")
 
 # ------------------------------------------------------
 # Pydantic data model and helper function for Citations
