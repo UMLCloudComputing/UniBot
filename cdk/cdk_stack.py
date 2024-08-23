@@ -29,7 +29,7 @@ class CdkStack(Stack):
             environment= {
                 "DYNAMO_TABLE" : table.table_name,
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
-                "ID" : os.getenv('ID'),
+                "DISCORD_ID" : os.getenv('DISCORD_ID'),
                 "INDEX_NAME" : os.getenv('INDEX_NAME'),
                 "PINECONE_API_KEY" : os.getenv('PINECONE_API_KEY'),
                 "OPENAI_API_KEY" : os.getenv('OPENAI_API_KEY'),
