@@ -29,6 +29,7 @@ st.set_page_config(
 )
 
 os.environ["DYNAMO_TABLE"] = st.secrets["DYNAMO_TABLE"]
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
 # ------------------------------------------------------
 # Pydantic data model and helper function for Citations
