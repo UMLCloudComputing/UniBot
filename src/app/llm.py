@@ -29,7 +29,7 @@ DYNAMO_TABLE = os.getenv('DYNAMO_TABLE')
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 logging.getLogger().setLevel(logging.ERROR) # reduce log level
-dynamo_client = boto3.client(service_name="dynamodb", region_name="us-east-1")
+dynamo_client = boto3.resource(service_name="dynamodb", region_name="us-east-1")
 
 # ------------------------------------------------------
 # LangChain - RAG chain with chat history
