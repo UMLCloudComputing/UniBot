@@ -6,6 +6,7 @@
 import app.llm as llm
 import streamlit as st
 import secrets
+import os
 from langchain_openai import ChatOpenAI
 from typing import List, Dict
 from pydantic import BaseModel
@@ -26,6 +27,8 @@ st.set_page_config(
         'About': None
     }
 )
+
+os.environ["DYNAMO_TABLE"] = st.secrets["DYNAMO_TABLE"]
 
 # ------------------------------------------------------
 # Pydantic data model and helper function for Citations
