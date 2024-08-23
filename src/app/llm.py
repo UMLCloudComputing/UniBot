@@ -51,7 +51,7 @@ prompt = ChatPromptTemplate.from_messages(
 
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-vector_store = PineconeVectorStore(index=pc.Index(os.getenv("INDEX_NAME").lower()), embedding=OpenAIEmbeddings(model="text-embedding-3-small"))
+vector_store = PineconeVectorStore(index=pc.Index(os.getenv("PINECONE_INDEX_NAME").lower()), embedding=OpenAIEmbeddings(model="text-embedding-3-small"))
 retriever = vector_store.as_retriever()
 
 # # OpenAI - GPT-4o-mini model
