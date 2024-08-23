@@ -123,23 +123,6 @@ def interact(raw_request):
 
                 #     message_content = "None"
 
-            # Command /weather [arg1: city]
-            # Gets the weather in just Lowell for now. Ignores the argument for city
-            case "weather":
-                message_content = weather()
-
-            # Command /course [arg1: COURSE ID] [arg2: option]
-            case "course":
-                send(":sparkles: Thinking :sparkles:", id, token)
-                course_message = data["options"][0]["value"]
-                message_content = course.invoke_llm(course_message)
-                update(message_content, token)
-
-            # Command /pizza
-            # Fun little command that prints pizza.
-            case "pizza":
-                message_content = "PIZZA! 🍕🍕🍕🍕🍕"
-
             # Command /dog
             # Sends a link embedded within the link's image of a dog   
             case "dog":
@@ -150,12 +133,6 @@ def interact(raw_request):
     return {}
 
 # You can define dedicated functions for commands as well
-
-def weather():
-    response = requests.get('https://api.weather.gov/gridpoints/BOX/74,59/forecast')
-    data = response.json()
-    forecast = data['properties']['periods'][0]
-    return f"Weather in Lowell, MA: {forecast['shortForecast']}, {forecast['temperature']}°{forecast['temperatureUnit']}"
 
 def send(message, id, token):
     url = f"https://discord.com/api/interactions/{id}/{token}/callback"
@@ -173,7 +150,7 @@ def send(message, id, token):
     print(response.status_code)
 
 def update(message, token):
-    app_id = os.environ.get("ID")
+    app_id = os.environ.get("DISCORD_ID")
 
     url = f"https://discord.com/api/webhooks/{app_id}/{token}/messages/@original"
 

@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - directingest
 
 jobs:
   deploy:
@@ -27,29 +26,31 @@ jobs:
     - name: Bootstrap
       run: cdk bootstrap
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        APP_NAME: ${{secrets.APP_NAME}}
+        APP_NAME: ${{env.APP_NAME}}
+        PINECONE_INDEX_NAME: ${{env.PINECONE_INDEX_NAME}}
         PINECONE_API_KEY: ${{secrets.PINECONE_API_KEY}}
-        ID: ${{secrets.ID}}
-        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+        DISCORD_ID: ${{env.DISCORD_ID}}
+        DISCORD_PUBLIC_KEY: ${{ env.DISCORD_PUBLIC_KEY }}
         OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
 
 
     - name: Deploy
       run: cdk deploy --all --require-approval never
       env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        APP_NAME: ${{secrets.APP_NAME}}
+        APP_NAME: ${{env.APP_NAME}}
+        PINECONE_INDEX_NAME: ${{env.PINECONE_INDEX_NAME}}
         PINECONE_API_KEY: ${{secrets.PINECONE_API_KEY}}
-        ID: ${{secrets.ID}}
-        DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
+        DISCORD_ID: ${{env.DISCORD_ID}}
+        DISCORD_PUBLIC_KEY: ${{ env.DISCORD_PUBLIC_KEY }}
         OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
 
     - name: Register & Delete Commands
       run: cd commands && python3 register_commands.py
       env:
+        DISCORD_ID: ${{env.DISCORD_ID}}
         DISCORD_PUBLIC_KEY: ${{ secrets.DISCORD_PUBLIC_KEY }}
-        ID: ${{secrets.ID}}
-        TOKEN: ${{secrets.TOKEN}}
+        DISCORD_TOKEN: ${{secrets.DISCORD_TOKEN}}

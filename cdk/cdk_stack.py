@@ -29,15 +29,16 @@ class CdkStack(Stack):
             environment= {
                 "DYNAMO_TABLE" : table.table_name,
                 "DISCORD_PUBLIC_KEY" : os.getenv('DISCORD_PUBLIC_KEY'),
-                "ID" : os.getenv('ID'),
-                "INDEX_NAME" : os.getenv('APP_NAME'),
+                "DISCORD_ID" : os.getenv('DISCORD_ID'),
+                "INDEX_NAME" : os.getenv('INDEX_NAME'),
                 "PINECONE_API_KEY" : os.getenv('PINECONE_API_KEY'),
                 "OPENAI_API_KEY" : os.getenv('OPENAI_API_KEY'),
             },            
             code=_lambda.DockerImageCode.from_image_asset(
                 directory="src"
             ),
-            timeout=Duration.seconds(300)
+            timeout=Duration.seconds(300),
+            memory_size=256,
         )
 
         api = apigateway.LambdaRestApi(self, f"API-{construct_id}",

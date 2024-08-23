@@ -77,10 +77,8 @@ class Citation(BaseModel):
 def extract_citations(response: List[Dict]) -> List[Citation]:
     return [Citation(page_content=doc.page_content, metadata=doc.metadata) for doc in response]
 
-# ------------------------------------------------------
-# Display chat messages
-config = {"configurable": {"session_id": "any"}}
 
+# Invoke LLM without streaming
 def invoke_llm(prompt, userID):
     # DynamoDB Chat History
     history = DynamoDBChatMessageHistory(table_name=DYNAMO_TABLE, session_id=userID)
@@ -93,6 +91,9 @@ def invoke_llm(prompt, userID):
         history_messages_key="history",
         output_messages_key="response",
     )
+
+    config = {"configurable": {"session_id": "any"}}
+
     response = chain_with_history.invoke(
         {"question" : prompt, "history" : history},
         config
@@ -105,6 +106,22 @@ def invoke_llm(prompt, userID):
         citation_text += citations[x].metadata['url'] + "\n"
 
     return response['response'] + "\n" + citation_text
+
+def stream_llm(prompt, userID):
+    # DynamoDB Chat History
+    history = DynamoDBChatMessageHistory(table_name=DYNAMO_TABLE, session_id=userID)
+
+    # Chain with History
+    chain_with_history = RunnableWithMessageHistory(
+        chain,
+        lambda session_id: history,
+        input_messages_key="question",
+        history_messages_key="history",
+        output_messages_key="response",
+    )
+
+    config = {"configurable": {"session_id": "any"}}
+    return chain_with_history.stream({"question" : prompt, "history" : history}, config)
 
 
 if __name__ == "__main__":
