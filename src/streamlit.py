@@ -32,6 +32,8 @@ os.environ["DYNAMO_TABLE"] = os.getenv("DYNAMO_TABLE") or st.secrets["DYNAMO_TAB
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY") or st.secrets["OPENAI_API_KEY"]
 os.environ["PINECONE_API_KEY"] = os.getenv("PINECONE_API_KEY") or st.secrets["PINECONE_API_KEY"]
 os.environ["PINECONE_INDEX_NAME"] = os.getenv("PINECONE_INDEX_NAME") or st.secrets["PINECONE_INDEX_NAME"]
+os.environ["AWS_REGION"] = "us-east-1"
+
 try: 
     os.environ["AWS_ACCESS_KEY_ID"] = st.secrets["AWS_ACCESS_KEY_ID"]
     os.environ["AWS_SECRET_ACCESS_KEY"] = st.secrets["AWS_SECRET_ACCESS_KEY"]
