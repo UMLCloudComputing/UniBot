@@ -37,7 +37,8 @@ class CdkStack(Stack):
             code=_lambda.DockerImageCode.from_image_asset(
                 directory="src"
             ),
-            timeout=Duration.seconds(300)
+            timeout=Duration.seconds(300),
+            memory_size=256,
         )
 
         api = apigateway.LambdaRestApi(self, f"API-{construct_id}",
