@@ -29,7 +29,8 @@ DYNAMO_TABLE = os.getenv('DYNAMO_TABLE')
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 logging.getLogger().setLevel(logging.ERROR) # reduce log level
-retrieval_runtime = boto3.client(service_name="bedrock-agent-runtime", region_name="us-east-1")
+session = boto3.Session(region_name="us-east-1")
+# dynamo_resource = session.resource('dynamodb')
 
 # ------------------------------------------------------
 # LangChain - RAG chain with chat history
@@ -109,7 +110,7 @@ def invoke_llm(prompt, userID):
 
 def stream_llm(prompt, userID):
     # DynamoDB Chat History
-    history = DynamoDBChatMessageHistory(table_name=DYNAMO_TABLE, session_id=userID)
+    history = DynamoDBChatMessageHistory(table_name=DYNAMO_TABLE, session_id=userID, boto3_session=session)
 
     # Chain with History
     chain_with_history = RunnableWithMessageHistory(
