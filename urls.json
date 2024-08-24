@@ -1,6 +1,8 @@
 {
     "sitemap" : "https://www.uml.edu/sitemap.xml",
     "urls" :[
-        "https://www.uml.edu/about/"
+        "https://www.uml.edu/about/",
+        "https://www.uml.edu/catalog/",
+        "https://www.uml.edu/thesolutioncenter/"
     ]
 }

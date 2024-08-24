@@ -35,11 +35,21 @@ def get_dict(substrings: list, sitemap_url: str):
     return extract_tags(soup, re.compile('|'.join(substrings)))
 
 def upsert(url):
-    print(f"Processing URL {url}")
+    # print(f"Processing URL {url}")
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     parsed_text = uml.extract(soup)
-    pc.insert_document(os.getenv("APP_NAME"), [parsed_text], [url])
+
+    file_name = f"data/dataset/{url.replace('/', '_')}.json"
+    if os.path.exists(file_name):
+        with open(f"data/dataset/{url.replace('/', '_')}.json", "r") as file:
+            content = json.load(file)
+            if (content["text"] != parsed_text):
+                print(f"Changes detected in {url}")
+                pc.insert_document(os.getenv("PINECONE_INDEX_NAME"), [parsed_text], [url])    
+    else:
+        print(f"New URL {url}")
+        pc.insert_document(os.getenv("PINECONE_INDEX_NAME"), [parsed_text], [url])
 
 def main():
     # Open urls.json file
