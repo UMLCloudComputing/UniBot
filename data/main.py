@@ -46,10 +46,10 @@ def upsert(url):
             content = json.load(file)
             if (content["text"] != parsed_text):
                 print(f"Changes detected in {url}")
-                # pc.insert_document(os.getenv("PINECONE_INDEX_NAME"), [parsed_text], [url])    
+                pc.insert_document(os.getenv("PINECONE_INDEX_NAME"), [parsed_text], [url])    
     else:
         print(f"New URL {url}")
-        # pc.insert_document(os.getenv("PINECONE_INDEX_NAME"), [parsed_text], [url])
+        pc.insert_document(os.getenv("PINECONE_INDEX_NAME"), [parsed_text], [url])
 
 def main():
     # Open urls.json file
