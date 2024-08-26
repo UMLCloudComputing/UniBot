@@ -72,12 +72,12 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if args.importdata:
         print("Importing data")
-        #pc.get_vector_index(os.getenv("APP_NAME").lower())
-        #pc.import_documents(os.getenv("APP_NAME").lower(), 10)
+        pc.get_vector_index(os.getenv("APP_NAME").lower())
+        pc.import_documents(os.getenv("APP_NAME").lower(), 10)
     elif args.courses:
         print("Extracting courses")
         uml.insert_courses(os.getenv("PINECONE_INDEX_NAME"))
     else:
         print("Running main")
-        #pc.get_vector_index(os.getenv("APP_NAME").lower())
-        #main()
+        pc.get_vector_index(os.getenv("APP_NAME").lower())
+        main()
