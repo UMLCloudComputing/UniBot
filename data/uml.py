@@ -216,13 +216,23 @@ def extract_courses():
     
     return course_dict
 
+def count_courses():
+    dict = extract_courses()
+
+    count = 0
+    for key in dict:
+        count += len(dict[key])
+    return count
+
 def insert_courses(index_name):
     course_dict = extract_courses()
     futures = []
+    count = 0;
     with concurrent.futures.ThreadPoolExecutor() as executor:
         for key in course_dict:
             course_list = course_dict[key]
-            for course in course_list: 
+            for course in course_list:
+                count += 1 
                 document = json_to_markdown(course)
                 url = f"https://www.uml.edu/Catalog/Courses/{course['Department']}/{course['CatalogNumber']}"
                 file_name = f"data/dataset/{url.replace('/', '_')}.json"
@@ -237,6 +247,7 @@ def insert_courses(index_name):
                 else:
                     print(f"New Course {url}")
                     executor.submit(pc.insert_document, index_name, [document], [url])
+    return count
 
 if __name__ == "__main__":
-    extract_courses()
+    print(insert_courses())

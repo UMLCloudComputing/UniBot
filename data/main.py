@@ -76,7 +76,8 @@ if __name__ == "__main__":
         pc.import_documents(os.getenv("APP_NAME").lower(), 10)
     elif args.courses:
         print("Extracting courses")
-        uml.insert_courses(os.getenv("PINECONE_INDEX_NAME"))
+        result = uml.insert_courses(os.getenv("PINECONE_INDEX_NAME"))
+        print(result)
     else:
         print("Running main")
         pc.get_vector_index(os.getenv("APP_NAME").lower())

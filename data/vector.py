@@ -84,7 +84,7 @@ def insert_document(index, content, url):
                 # Save the embed in a CSV file in dataset/
 
                 # Create dataset folder if it doesn't exist
-                newpath = "dataset"
+                newpath = "data/dataset"
                 if not os.path.exists(newpath):
                     os.makedirs(newpath)
 
