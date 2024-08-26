@@ -68,10 +68,17 @@ if __name__ == "__main__":
     # If argument "import" is set, import the documents using argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--importdata", action="store_true")
+    parser.add_argument("--courses", action="store_true")
     args = parser.parse_args()
     if args.importdata:
+        print("Importing data")
         pc.get_vector_index(os.getenv("APP_NAME").lower())
         pc.import_documents(os.getenv("APP_NAME").lower(), 10)
+    elif args.courses:
+        print("Extracting courses")
+        result = uml.insert_courses(os.getenv("PINECONE_INDEX_NAME"))
+        print(result)
     else:
+        print("Running main")
         pc.get_vector_index(os.getenv("APP_NAME").lower())
         main()

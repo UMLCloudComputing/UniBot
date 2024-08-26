@@ -1,4 +1,4 @@
-name: Update Vector Index
+name: Import Saved Dataset
 
 on:
   workflow_dispatch:  # Allows manual triggering

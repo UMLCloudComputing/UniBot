@@ -3,6 +3,7 @@
 import json
 import requests
 import re
+import difflib
 import os
 import vector as pc
 import concurrent.futures
@@ -122,7 +123,7 @@ DEPARTMENT_PREFIXES = [
     "WORC",
 ]
 
-INDEX_NAME = os.getenv("INDEX_NAME")
+INDEX_NAME = os.getenv("PINECONE_INDEX_NAME")
 
 # Function to convert JSON to Markdown
 def json_to_markdown(course):
@@ -140,17 +141,6 @@ def json_to_markdown(course):
     markdown += f"## Prerequisites:\n{requirements}\n\n"
 
     return markdown
-
-def insert_chunk(chunk, chunk_number, prefix):
-    markdown_output = ""
-    for course in chunk:
-        # Json to markdown
-        markdown_output += json_to_markdown(course)
-        markdown_output += "\n\n"
-
-    # Write to file
-    url = f"https://www.uml.edu/Catalog/Advanced-Search.aspx?prefix={prefix}&type=prefix#{chunk_number}"
-    pc.insert_document(INDEX_NAME, [markdown_output], [url])
 
 def extract(soup):
     # Remove Headers, Footers, and Sidebars
@@ -195,23 +185,69 @@ def extract(soup):
 
     return parsed_text
 
+def extract_course_helper(prefix):
+    print(f"Inserting courses {prefix} into dictionary")
+    result = requests.get(f"https://www.uml.edu/api/registrar/course_catalog/v1.0/courses?field=subject&query={prefix}")
+    courses = result.json()
+    return courses
+    # with concurrent.futures.ThreadPoolExecutor() as executor:
+    #     futures = []
+    #     for i in range(0, len(courses), batch_size):
+    #         batch = courses[i:i + batch_size]
+    #         documents = [json_to_markdown(course) for course in batch]
+    #         urls = [f"https://www.uml.edu/Catalog/Courses/{course['Department']}/{course['CatalogNumber']}" for course in batch]
+    #         # print(f"Inserting {len(batch)} courses")
+    #         futures.append(executor.submit(pc.insert_document, INDEX_NAME, documents, urls))
+
+    #     # Check for exceptions
+    #     for future in concurrent.futures.as_completed(futures):
+    #         try:
+    #             future.result()
+    #         except Exception as e:
+    #             print(f"Error processing batch: {e}")
+
 
 def extract_courses():
-    vector = pc.get_vector_index(INDEX_NAME)
+    course_dict = {}
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = []
+    with concurrent.futures.ThreadPoolExecutor() as outer_executor:
         for prefix in DEPARTMENT_PREFIXES:
-            result = requests.get(f"https://www.uml.edu/api/registrar/course_catalog/v1.0/courses?field=subject&query={prefix}")
-            courses = result.json()
+            course_dict[prefix] = outer_executor.submit(extract_course_helper, prefix).result()
+    
+    return course_dict
 
-            for i in range(0, len(courses), CHUNK_SIZE):
-                chunk = courses[i:i + CHUNK_SIZE]
-                chunk_number = i // CHUNK_SIZE + 1
-                futures.append(executor.submit(insert_chunk, chunk, chunk_number, prefix))
+def count_courses():
+    dict = extract_courses()
 
-        # Wait for all futures to complete
-        concurrent.futures.wait(futures)
+    count = 0
+    for key in dict:
+        count += len(dict[key])
+    return count
+
+def insert_courses(index_name):
+    course_dict = extract_courses()
+    futures = []
+    count = 0;
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        for key in course_dict:
+            course_list = course_dict[key]
+            for course in course_list:
+                count += 1 
+                document = json_to_markdown(course)
+                url = f"https://www.uml.edu/Catalog/Courses/{course['Department']}/{course['CatalogNumber']}"
+                file_name = f"data/dataset/{url.replace('/', '_')}.json"
+                if os.path.exists(file_name):
+                    with open(file_name, "r") as file:
+                        content = json.load(file)
+                        if (content["text"] != document):
+                            print(f"Updated Course {url}")
+                            futures.append(executor.submit(pc.insert_document, index_name, [document], [url]))
+                        else:
+                            print(f"Course {url} already exists")
+                else:
+                    print(f"New Course {url}")
+                    executor.submit(pc.insert_document, index_name, [document], [url])
+    return count
 
 if __name__ == "__main__":
-    extract_courses()
+    print(insert_courses())
