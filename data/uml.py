@@ -3,6 +3,7 @@
 import json
 import requests
 import re
+import difflib
 import os
 import vector as pc
 import concurrent.futures
@@ -230,7 +231,16 @@ def insert_courses(index_name):
                         with open(file_name, "r") as file:
                             content = json.load(file)
                             if (content["text"] != document):
-                                print(f"Changes detected in {url}")
+                            #     print(f"Changes detected in {url}")
+                            #     diff = difflib.unified_diff(
+                            #         content["text"].splitlines(),
+                            #         document.splitlines(),
+                            #         fromfile='old',
+                            #         tofile='new',
+                            #         lineterm=''
+                            #     )
+                            #     for line in diff:
+                            #         print(line)
                                 executor.submit(pc.insert_document, index_name, [document], [url])
                     else:
                         print(f"New Course {url}")
