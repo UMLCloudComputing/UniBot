@@ -218,33 +218,25 @@ def extract_courses():
 
 def insert_courses(index_name):
     course_dict = extract_courses()
+    futures = []
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        for prefix in course_dict:
-            courses = course_dict[prefix]
-            for i in range(0, len(courses), CHUNK_SIZE):
-                chunk = courses[i:i + CHUNK_SIZE]
-                for course in chunk:
-                    document = json_to_markdown(course)
-                    url = f"https://www.uml.edu/Catalog/Courses/{course['Department']}/{course['CatalogNumber']}"
-                    file_name = f"data/dataset/{url.replace('/', '_')}.json"
-                    if os.path.exists(file_name):
-                        with open(file_name, "r") as file:
-                            content = json.load(file)
-                            if (content["text"] != document):
-                            #     print(f"Changes detected in {url}")
-                            #     diff = difflib.unified_diff(
-                            #         content["text"].splitlines(),
-                            #         document.splitlines(),
-                            #         fromfile='old',
-                            #         tofile='new',
-                            #         lineterm=''
-                            #     )
-                            #     for line in diff:
-                            #         print(line)
-                                executor.submit(pc.insert_document, index_name, [document], [url])
-                    else:
-                        print(f"New Course {url}")
-                        executor.submit(pc.insert_document, index_name, [document], [url])
+        for key in course_dict:
+            course_list = course_dict[key]
+            for course in course_list: 
+                document = json_to_markdown(course)
+                url = f"https://www.uml.edu/Catalog/Courses/{course['Department']}/{course['CatalogNumber']}"
+                file_name = f"data/dataset/{url.replace('/', '_')}.json"
+                if os.path.exists(file_name):
+                    with open(file_name, "r") as file:
+                        content = json.load(file)
+                        if (content["text"] != document):
+                            print(f"Updated Course {url}")
+                            futures.append(executor.submit(pc.insert_document, index_name, [document], [url]))
+                        else:
+                            print(f"Course {url} already exists")
+                else:
+                    print(f"New Course {url}")
+                    executor.submit(pc.insert_document, index_name, [document], [url])
 
 if __name__ == "__main__":
     extract_courses()
