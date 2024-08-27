@@ -87,11 +87,7 @@ def send(message):
     url = f"https://discord.com/api/interactions/{os.getenv('INTERACTIONS_ID')}/{os.getenv('INTERACTIONS_TOKEN')}/callback"
 
     callback_data = {
-        "type": 4,
-        "data": {
-            "content": message,
-            "flags": 1 << 7
-        }
+        "type": 5
     }
 
     response = requests.post(url, json=callback_data)
@@ -100,17 +96,23 @@ def send(message):
     print(response.status_code)
 
 def update(message):
-    url = f"https://discord.com/api/webhooks/{os.getenv('DISCORD_ID')}/{os.getenv('INTERACTIONS_TOKEN')}/messages/@original"
+    url = f"https://discord.com/api/webhooks/{os.getenv('DISCORD_ID')}/{os.getenv('INTERACTIONS_TOKEN')}"
 
-    # JSON data to send with the request
     data = {
         "content": message
     }
 
+    # # JSON data to send with the request
+    # data = {
+    #     "content": message
+    # }
+
     # Send the PATCH request
-    response = requests.patch(url, json=data)
+    response = requests.post(url, json=data)
 
     print("Response status code: ")
     print(response.status_code)
+    # print error
+    print(response.text)
 
 
