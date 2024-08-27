@@ -1,23 +1,78 @@
 import os
 import requests
-import llm
 import json
-import db
-from datetime import datetime
 from nacl.signing import VerifyKey
 from nacl.exceptions import BadSignatureError
 
-DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY")
-MAX_QUERIES = 20
+def handler(event, context):
+    '''
+    Entry point for Lambda function
+    '''
+
+    # Verify the cryptographic Signature
+    if not verify(event):
+        return {'statusCode': 401, 'body': json.dumps('Unauthorized')}
+
+    body = json.loads(event['body'])
+
+    if body['type'] == 1:
+        return {'statusCode': 200, 'body': json.dumps({'type': 1})}
+    else:
+        return interact(body)
+
+
+def interact(raw_request):
+    '''
+    Handle the interaction request
+    '''
+
+    # Discord sends a request based on the slash command entered
+    # This will intepret the request
+    # Store Interactions TOKEN and ID
+    os.environ["INTERACTIONS_TOKEN"] = raw_request["token"]
+    os.environ["INTERACTIONS_ID"] = raw_request["id"]
+
+    # Immediately send an interaction response back to discord to prevent a timeout
+    send(":sparkles: Thinking :sparkles:")
+
+    data = raw_request["data"]
+    userID = raw_request["member"]["user"]["id"]
+
+    print(f"The Interaction Was Executed By User: {userID}")
+    print(f"Full Interactions Structure {data}")
+
+    # The command being executed
+    command_name = data["name"]
+
+    match command_name:
+        # Command /chat [arg1: message]
+        case "chat":
+            message = data["options"][0]["value"]
+            import llm
+            result = llm.invoke_llm(message, userID)
+            print(f"LLM Response: {result}")
+
+            # Count number of characters
+            if len(result) > 2000:
+                result = result[:2000] + "..."
+
+            update(result)
+
+        # Command /dog
+        # Sends a link embedded within the link's image of a dog   
+        case "dog":
+            message_content = requests.get("https://dog.ceo/api/breeds/image/random").json().get("message")
+            update(message_content)
+
+    return {}
 
 def verify(event):
+    '''
+    Validates the request signature. This makes sure that the Interactions API request is coming from Discord
+    '''
     signature = event['headers']['x-signature-ed25519']
     timestamp = event['headers']['x-signature-timestamp']
-
-    # validate the interaction
-
-    verify_key = VerifyKey(bytes.fromhex(DISCORD_PUBLIC_KEY))
-
+    verify_key = VerifyKey(bytes.fromhex(os.environ.get("DISCORD_PUBLIC_KEY")))
     message = timestamp + event['body']
 
     try:
@@ -27,120 +82,15 @@ def verify(event):
         return False
     return True
 
-
-def handler(event, context):
-    try:
-        # Verify the cryptographic Signature
-        if not verify(event):
-            return {'statusCode': 401, 'body': json.dumps('Unauthorized')}
-
-        body = json.loads(event['body'])
-
-        if body['type'] == 1:
-            return {'statusCode': 200, 'body': json.dumps({'type': 1})}
-        else:
-            return interact(body)
-    except:
-        raise
-
-def interact(raw_request):
-
-    # Let discord know that this bot is alive
-    if raw_request["type"] == 1:  # PING
-        response_data = {"type": 1}  # PONG
-    
-    # Discord sends a request based on the slash command entered
-    # This will intepret the request
-    else:
-        # Auxiliary Command Data. Used to extract arguments
-        data = raw_request["data"]
-        token = raw_request["token"]
-        id = raw_request["id"]
-        userID = raw_request["member"]["user"]["id"]
-        print(userID)
-
-        # The command being executed
-        command_name = data["name"]
-
-        # if db.get_item("date") == -1:
-        #     db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
-        # else:
-        #     date_string = db.get_item("date")
-        #     current_date = datetime.strptime(date_string, "%Y-%m-%d")
-
-        #     if current_date.date() < datetime.now().date():
-        #         send("Please wait. Refreshing Daily Query Limits", id, token)
-        #         db.reset_table()
-                
-        #     db.add_item("date", datetime.now().strftime("%Y-%m-%d"))
-
-        match command_name:
-            
-            # Reset user Query Limits
-            case "reset":
-                send("Resetting Query Limits", id, token)
-                db.reset_table()
-                message_content = ":green_circle: Query Limits reset successfully!"
-                update(message_content, token)
-            # Command /hello
-            case "hello":
-                # message_content is the response to the user
-                message_content = "Hello there!"
-
-            # Command /echo
-            case "echo":
-                original_message = data["options"][0]["value"]
-                message_content = f"Echoing: {original_message}"
-
-            # Command /chat [arg1: message]
-            case "chat":
-                # Immediately send an interaction response back to discord to prevent a timeout
-                send(":sparkles: Thinking :sparkles:", id, token)
-                original_message = data["options"][0]["value"]
-                result = llm.invoke_llm(original_message, userID)
-                print(result)
-                update(result, token)
-                message_content = "None"
-
-                # if db.get_item(userID) == -1:
-                #     db.add_item(userID, 0)
-                
-                # if db.get_item(userID) >= MAX_QUERIES:
-                #     message_content = f"You have reached the limit of {MAX_QUERIES} queries per day. Please wait for a while.\n"
-                #     message_content += f":red_circle: {MAX_QUERIES} / {MAX_QUERIES}"
-                # else:
-                #     # Invoke the LLM model
-                #     original_message = data["options"][0]["value"]
-                #     result = llm.invoke_llm(original_message, userID)
-
-                #     result += f"\n :green_circle: " + str(db.get_item(userID) + 1) + f" / {MAX_QUERIES}"
-
-                #     # Edit the interaction response sent earlier
-                #     update(result, token)
-
-                #     newCount = db.get_item(userID) + 1
-                #     db.add_item(userID, newCount)
-
-                #     message_content = "None"
-
-            # Command /dog
-            # Sends a link embedded within the link's image of a dog   
-            case "dog":
-                message_content = dog()
-        
-
-    send(message_content, id, token)  # Send the message back to Discord
-    return {}
-
-# You can define dedicated functions for commands as well
-
-def send(message, id, token):
-    url = f"https://discord.com/api/interactions/{id}/{token}/callback"
+# Utility Functions For Discord API
+def send(message):
+    url = f"https://discord.com/api/interactions/{os.getenv('INTERACTIONS_ID')}/{os.getenv('INTERACTIONS_TOKEN')}/callback"
 
     callback_data = {
         "type": 4,
         "data": {
-            "content": message
+            "content": message,
+            "flags": 1 << 7
         }
     }
 
@@ -149,10 +99,8 @@ def send(message, id, token):
     print("Response status code: ")
     print(response.status_code)
 
-def update(message, token):
-    app_id = os.environ.get("DISCORD_ID")
-
-    url = f"https://discord.com/api/webhooks/{app_id}/{token}/messages/@original"
+def update(message):
+    url = f"https://discord.com/api/webhooks/{os.getenv('DISCORD_ID')}/{os.getenv('INTERACTIONS_TOKEN')}/messages/@original"
 
     # JSON data to send with the request
     data = {
@@ -165,15 +113,4 @@ def update(message, token):
     print("Response status code: ")
     print(response.status_code)
 
-def dog():
 
-    # Request content of page, then parse it with JSON-to-Python-dictionary function called .json()
-    page = requests.get("https://dog.ceo/api/breeds/image/random").json()
-    
-    # Check if page status is not success. If it is not success, then return a fixed message
-    if page["status"] != "success":
-        return "No dog :("
-    
-    # Otherwise, get the URL value in the "message" key of the page Python dictionary, then return the URL
-    get_dog = page["message"]
-    return get_dog
