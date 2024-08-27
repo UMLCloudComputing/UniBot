@@ -33,7 +33,7 @@ def interact(raw_request):
     os.environ["INTERACTIONS_ID"] = raw_request["id"]
 
     # Immediately send an interaction response back to discord to prevent a timeout
-    send(":sparkles: Thinking :sparkles:")
+    send()
 
     data = raw_request["data"]
     userID = raw_request["member"]["user"]["id"]
@@ -83,17 +83,13 @@ def verify(event):
     return True
 
 # Utility Functions For Discord API
-def send(message):
+def send():
     url = f"https://discord.com/api/interactions/{os.getenv('INTERACTIONS_ID')}/{os.getenv('INTERACTIONS_TOKEN')}/callback"
-
-    callback_data = {
-        "type": 5
-    }
-
-    response = requests.post(url, json=callback_data)
+    response = requests.post(url, json={"type": 5})
     
     print("Response status code: ")
     print(response.status_code)
+    print(response.text)
 
 def update(message):
     url = f"https://discord.com/api/webhooks/{os.getenv('DISCORD_ID')}/{os.getenv('INTERACTIONS_TOKEN')}"
@@ -102,17 +98,11 @@ def update(message):
         "content": message
     }
 
-    # # JSON data to send with the request
-    # data = {
-    #     "content": message
-    # }
-
     # Send the PATCH request
     response = requests.post(url, json=data)
 
     print("Response status code: ")
     print(response.status_code)
-    # print error
     print(response.text)
 
 
