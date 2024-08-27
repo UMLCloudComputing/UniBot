@@ -104,7 +104,7 @@ def invoke_llm(prompt, userID):
     
     citation_text = "Sources:\n"
     for x in range(0, 3):
-        citation_text += citations[x].metadata['url'] + "\n"
+        citation_text += "<" + citations[x].metadata['url'] + ">\n"
 
     return response['response'] + "\n" + citation_text
 
