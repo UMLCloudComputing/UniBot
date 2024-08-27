@@ -26,9 +26,8 @@ sidebar_position: 6
 1. From your root directory, run `python3 register_commands.py`
 2. You should receive the status `201` or `200` printing out in your terminal.
 
-### Defining Commands
-1. Commands can be defined in the file `src/app/main.py`
-2. You can register commands in the `interact` function by adding more `elif` statements. 
-   1. The parameters of the command that are received from the user is in encoded in the variable `data`. The statement `data["options"][n]["value"]` will extract the argument `n`.   
-   2. The message that the bot returns to the user is specified in the string variable `message_content`. It is crucial that `message_content` is a string.
-   3. Following the example of the `/weather` command, you may choose to call an external function that returns a string for better code readability.
+### Adding Command Functionality
+1. Commands can be defined in the file `src/app/main.py`.
+2. This bot uses the Discord Interactions API, which is a REST API. When a user executes a slash command, Discord will make an API request to the endpoint you specify in the Discord Developer Portal
+3. The full structure of the Interactions API can be found in the [Discord API Documentation](https://discord.com/developers/docs/interactions/slash-commands).
+4. For the purposes of our bot, we will turn the JSON request into a Python object and then use the `request['data']['name']` field to determine which command to run.

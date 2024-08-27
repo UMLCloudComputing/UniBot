@@ -10,7 +10,6 @@ import concurrent.futures
 from dotenv import load_dotenv
 
 load_dotenv()
-print("PINECONE_API_KEY:", os.getenv("PINECONE_API_KEY"))
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
 # Environmental Variables

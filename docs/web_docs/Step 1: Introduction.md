@@ -16,18 +16,22 @@ Then run
 `npm install`
 `pip install -r requirements.txt`
 
-### Create your environment variable file
+### Create your dotenv file
 
-1. Create an `.env` file with the following variables. You will be needing these in the next step.
+1. Clone the repository through `git clone https://github.com/UMLCloudComputing/UniBot`
+2. Create an `.env` file with the following variables. You will be needing these in the following steps.
 ```
 APP_NAME=
+
 PINECONE_URL =
 PINECONE_API_KEY =
-TOKEN=
-ID=
+
+DISCORD_TOKEN=
+DISCORD_ID=
 DISCORD_PUBLIC_KEY=
 ```
-2. Do not share this file with anyone. It contains your secret key.
+3. Set your `APP_NAME` to anything you want. However it must be unique and will be used to identify your deployment.
+4. Run `cdk bootstrap` to initialize your CDK environment. This will create a CloudFormation stack in your AWS account.
 
 
 
