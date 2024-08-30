@@ -52,7 +52,7 @@ def extract_citations(response: List[Dict]) -> List[Citation]:
 
 # Initialize session state for messages if not already present
 if "messages" not in st.session_state:
-    st.session_state.messages = [{"role": "assistant", "content": "Ask me anything about UMass Lowell!"}]
+    st.session_state.messages = [{"role": "assistant", "content": "Ask me anything about UMass Lowell! If there is anything you would like me to know before we initiate this conversation, please let me know."}]
 
 # Display chat messages
 for message in st.session_state.messages:
