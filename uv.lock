@@ -117,6 +117,15 @@ wheels = [
 ]
 
 [[package]]
+name = "argcomplete"
+version = "3.6.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/16/0f/861e168fc813c56a78b35f3c30d91c6757d1fd185af1110f1aec784b35d0/argcomplete-3.6.2.tar.gz", hash = "sha256:d0519b1bc867f5f4f4713c41ad0aba73a4a5f007449716b16f385f2166dc6adf", size = 73403, upload-time = "2025-04-03T04:57:03.52Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/31/da/e42d7a9d8dd33fa775f467e4028a47936da2f01e4b0e561f9ba0d74cb0ca/argcomplete-3.6.2-py3-none-any.whl", hash = "sha256:65b3133a29ad53fb42c48cf5114752c7ab66c1c38544fdf6460f450c09b42591", size = 43708, upload-time = "2025-04-03T04:57:01.591Z" },
+]
+
+[[package]]
 name = "attrs"
 version = "25.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1392,6 +1401,19 @@ wheels = [
 ]
 
 [[package]]
+name = "ramalama"
+version = "0.12.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "argcomplete" },
+    { name = "pyyaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/08/31/e033911fb8c6332b1f935cfa91bfa9a2ece930e9f7150f4f8008eb9b7427/ramalama-0.12.3.tar.gz", hash = "sha256:666ce5a71c8560682a2ec9e83e97597d0d26c201e6b01222ef7d82b46f679ed7", size = 176434, upload-time = "2025-09-29T13:25:22.436Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ae/6c/47cfe1c08cd0023ca816f401cb1ab4750429589ea330ffe7a78d83e3ee8b/ramalama-0.12.3-py3-none-any.whl", hash = "sha256:6a44863c1415eb768a368248e9ad9a13ced4728b357023ffb4a3950a75a5e4c2", size = 201402, upload-time = "2025-09-29T13:25:20.846Z" },
+]
+
+[[package]]
 name = "regex"
 version = "2025.9.18"
 source = { registry = "https://pypi.org/simple" }
@@ -1722,6 +1744,7 @@ dependencies = [
     { name = "pynacl" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
+    { name = "ramalama" },
     { name = "requests" },
 ]
 
@@ -1742,6 +1765,7 @@ requires-dist = [
     { name = "pynacl", specifier = ">=1.6.0" },
     { name = "python-dotenv", specifier = ">=1.1.1" },
     { name = "pyyaml", specifier = ">=6.0.3" },
+    { name = "ramalama", specifier = ">=0.12.3" },
     { name = "requests", specifier = ">=2.32.5" },
 ]
 
